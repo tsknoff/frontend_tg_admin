@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-export default function Content() {
+export const Content = () => {
   return (
     <Paper sx={{ maxWidth: 936, margin: "auto", overflow: "hidden" }}>
       <AppBar
@@ -53,4 +53,4 @@ export default function Content() {
       </Typography>
     </Paper>
   );
-}
+};

@@ -1,13 +1,7 @@
-import { CssBaseline } from "@mui/material";
-import Paperbase from "./Layout/Paperbase.tsx";
+import { Layout } from "./UI/layout";
 
 function App() {
-  return (
-    <>
-      <CssBaseline />
-      <Paperbase />
-    </>
-  );
+  return <Layout />;
 }
 
 export default App;

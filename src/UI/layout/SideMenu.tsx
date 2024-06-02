@@ -61,7 +61,7 @@ const itemCategory = {
   px: 3,
 };
 
-export default function Navigator(props: DrawerProps) {
+export const SideMenu = (props: DrawerProps) => {
   const { ...other } = props;
 
   return (
@@ -97,4 +97,4 @@ export default function Navigator(props: DrawerProps) {
       </List>
     </Drawer>
   );
-}
+};
