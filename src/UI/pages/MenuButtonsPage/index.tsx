@@ -88,7 +88,6 @@ export const MenuButtonsPage: React.FC = () => {
   };
 
   const handleAddButton = () => {
-    // promt с двумя полями Button name и Button link
     const name = prompt("Введите название кнопки", "Новая кнопка");
     if (name) {
       dispatch(addButton(name));
