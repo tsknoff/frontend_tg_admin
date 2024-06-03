@@ -6,23 +6,27 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import MenuBook from "@mui/icons-material/MenuBook";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import Email from "@mui/icons-material/Email";
 import Group from "@mui/icons-material/Group";
 import BarChart from "@mui/icons-material/BarChart";
-import EmojiEvents from "@mui/icons-material/EmojiEvents";
 import { Link, useLocation } from "react-router-dom";
 
 const categories = [
   {
-    id: "Бот",
+    id: "",
     children: [
       {
-        id: "Управление меню",
-        icon: <MenuBook />,
-        url: "buttons",
+        id: "Dashboard",
+        icon: <DashboardIcon />,
+        url: "dashboard",
         active: true,
       },
+    ],
+  },
+  {
+    id: "",
+    children: [
       {
         id: "Рассылка",
         icon: <Email />,
@@ -35,16 +39,15 @@ const categories = [
         url: "groups",
         active: false,
       },
+    ],
+  },
+  {
+    id: "",
+    children: [
       {
         id: "Статистика",
         icon: <BarChart />,
         url: "statistics",
-        active: false,
-      },
-      {
-        id: "Приветствие",
-        icon: <EmojiEvents />,
-        url: "greeting",
         active: false,
       },
     ],
@@ -78,10 +81,13 @@ export const SideMenu = (props: DrawerProps) => {
         <ListItem
           sx={{ ...item, ...itemCategory, fontSize: 22, color: "#000" }}
         >
-          Телеграм бот
+          @spasibo_bot
         </ListItem>
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#fff" }}>
+            <ListItem sx={{ py: 2, px: 3 }}>
+              <ListItemText sx={{ color: "#000" }}>{id}</ListItemText>
+            </ListItem>
             {children.map(({ id: childId, icon, url }) => (
               <Link to={url} style={{ textDecoration: "none" }} key={childId}>
                 <ListItem disablePadding>

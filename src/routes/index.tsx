@@ -9,12 +9,13 @@ export const routes = [
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/buttons",
+        path: "/dashboard",
+        index: true,
         element: <MenuButtonsPage />,
       },
       {
         path: "/email",
-        element: <div>Email</div>,
+        element: <div>Рассылка</div>, // Рассылка на английском будеь "Email"
       },
       {
         path: "/groups",
@@ -23,10 +24,6 @@ export const routes = [
       {
         path: "/statistics",
         element: <div>Statistics</div>,
-      },
-      {
-        path: "/greeting",
-        element: <div>Greeting</div>,
       },
     ],
   },
