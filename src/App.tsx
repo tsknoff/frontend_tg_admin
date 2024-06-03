@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Root } from "./routes";
 import { MenuButtonsPage } from "./UI/pages/MenuButtonsPage";
+import { Root } from "./UI/layout";
 
 const router = createBrowserRouter([
   {

@@ -5,10 +5,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import { useState } from "react";
+import { Outlet } from "react-router-dom";
 import { theme } from "../theme.ts";
 import { SideMenu } from "./SideMenu.tsx";
 import { Header } from "./Header.tsx";
-import { MenuButtonsPage } from "../pages/MenuButtonsPage";
 
 function Copyright() {
   return (
@@ -24,7 +24,7 @@ function Copyright() {
 
 const drawerWidth = 256;
 
-export const Layout = () => {
+export const Root = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -59,8 +59,7 @@ export const Layout = () => {
             component="main"
             sx={{ flex: 1, py: 6, px: 4, bgcolor: "#eaeff1" }}
           >
-            {/*<Content />*/}
-            <MenuButtonsPage />
+            <Outlet />
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
             <Copyright />
