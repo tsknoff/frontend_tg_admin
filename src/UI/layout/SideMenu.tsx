@@ -11,7 +11,7 @@ import Email from "@mui/icons-material/Email";
 import Group from "@mui/icons-material/Group";
 import BarChart from "@mui/icons-material/BarChart";
 import EmojiEvents from "@mui/icons-material/EmojiEvents";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const categories = [
   {
@@ -70,6 +70,8 @@ const itemCategory = {
 export const SideMenu = (props: DrawerProps) => {
   const { ...other } = props;
 
+  const link = useLocation();
+
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
@@ -80,13 +82,13 @@ export const SideMenu = (props: DrawerProps) => {
         </ListItem>
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#fff" }}>
-            {/*<ListItem sx={{ py: 2, px: 3 }}>*/}
-            {/*  <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>*/}
-            {/*</ListItem>*/}
-            {children.map(({ id: childId, icon, active, url }) => (
+            {children.map(({ id: childId, icon, url }) => (
               <Link to={url} style={{ textDecoration: "none" }} key={childId}>
                 <ListItem disablePadding>
-                  <ListItemButton selected={active} sx={item}>
+                  <ListItemButton
+                    selected={link.pathname === `/${url}`}
+                    sx={item}
+                  >
                     <ListItemIcon>{icon}</ListItemIcon>
                     <ListItemText
                       style={{

@@ -1,10 +1,12 @@
 import { Root } from "../UI/layout";
 import { MenuButtonsPage } from "../UI/pages/MenuButtonsPage";
+import { ErrorPage } from "./ErrorPage.tsx";
 
 export const routes = [
   {
     path: "/",
     element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/buttons",
