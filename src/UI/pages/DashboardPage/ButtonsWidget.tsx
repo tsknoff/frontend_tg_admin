@@ -20,12 +20,13 @@ import {
   reorderButtons,
   TGMenuButton,
 } from "../../../features/buttons/buttonSlice";
-import { getItemStyle, getListStyle } from "./styles";
+import { getItemStyle, getListStyle, useButtonsWidgetStyles } from "./styles";
 import CircularProgress from "@mui/material/CircularProgress";
 import EditIcon from "@mui/icons-material/Edit";
 import HelpIcon from "@mui/icons-material/Help";
 
 export const ButtonsWidget: React.FC = () => {
+  const { classes } = useButtonsWidgetStyles();
   const dispatch: AppDispatch = useDispatch();
   const buttons = useSelector((state: RootState) => state.buttons.buttons);
   const status = useSelector((state: RootState) => state.buttons.status);
@@ -94,22 +95,8 @@ export const ButtonsWidget: React.FC = () => {
   };
 
   return (
-    <Paper
-      sx={{
-        maxWidth: 380,
-        margin: "0",
-        overflow: "hidden",
-        alignSelf: "flex-start",
-      }}
-    >
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          // alignItems: "center",
-          padding: "10px",
-        }}
-      >
+    <Paper className={classes.root}>
+      <Box className={classes.header}>
         <Typography
           sx={{ my: 1, mx: 2 }}
           color="text.primary"
@@ -132,14 +119,7 @@ export const ButtonsWidget: React.FC = () => {
       </Box>
       <DragDropContext onDragEnd={handleOnDragEnd}>
         {status === "loading" ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "200px",
-            }}
-          >
+          <Box className={classes.loader}>
             <CircularProgress />
           </Box>
         ) : (
@@ -167,13 +147,7 @@ export const ButtonsWidget: React.FC = () => {
                         )}
                       >
                         {item.name}
-                        <Box
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
+                        <Box className={classes.itemWrapper}>
                           <Tooltip title="Редактировать кнопку">
                             <IconButton
                               aria-label="delete"

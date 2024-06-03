@@ -14,7 +14,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const categories = [
   {
-    id: "",
+    id: "1",
     children: [
       {
         id: "Dashboard",
@@ -25,7 +25,7 @@ const categories = [
     ],
   },
   {
-    id: "",
+    id: "2",
     children: [
       {
         id: "Рассылки",
@@ -42,7 +42,7 @@ const categories = [
     ],
   },
   {
-    id: "",
+    id: "3",
     children: [
       {
         id: "Статистика",
@@ -86,7 +86,7 @@ export const SideMenu = (props: DrawerProps) => {
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#fff" }}>
             <ListItem sx={{ py: 2, px: 3 }}>
-              <ListItemText sx={{ color: "#000" }}>{id}</ListItemText>
+              <ListItemText sx={{ color: "#000" }}></ListItemText>
             </ListItem>
             {children.map(({ id: childId, icon, url }) => (
               <Link
@@ -97,7 +97,7 @@ export const SideMenu = (props: DrawerProps) => {
                 }}
                 key={childId}
               >
-                <ListItem disablePadding>
+                <ListItem disablePadding key={childId}>
                   <ListItemButton
                     selected={link.pathname === `/${url}`}
                     sx={item}

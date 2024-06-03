@@ -1,6 +1,7 @@
 import { Root } from "../UI/layout";
-import { MenuButtonsPage } from "../UI/pages/MenuButtonsPage";
+import { DashboardPage } from "../UI/pages/DashboardPage";
 import { ErrorPage } from "./ErrorPage.tsx";
+import { MailsPage } from "../UI/pages/MailsPage";
 
 export const routes = [
   {
@@ -11,11 +12,11 @@ export const routes = [
       {
         path: "/dashboard",
         index: true,
-        element: <MenuButtonsPage />,
+        element: <DashboardPage />,
       },
       {
         path: "/email",
-        element: <div>Рассылка</div>, // Рассылка на английском будеь "Email"
+        element: <MailsPage />,
       },
       {
         path: "/groups",

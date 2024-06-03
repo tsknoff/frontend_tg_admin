@@ -2,25 +2,11 @@ import { ThemeProvider } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { theme } from "../theme.ts";
 import { SideMenu } from "./SideMenu.tsx";
 import { Header } from "./Header.tsx";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}.
-    </Typography>
-  );
-}
 
 const drawerWidth = 256;
 
@@ -55,15 +41,30 @@ export const Root = () => {
         </Box>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <Header onDrawerToggle={handleDrawerToggle} />
+          {/*<div*/}
+          {/*  style={{*/}
+          {/*    position: "absolute",*/}
+          {/*    width: "100%",*/}
+          {/*    height: "100%",*/}
+          {/*    backgroundImage: "url('assets/bg.webp')",*/}
+          {/*    backgroundSize: "300px",*/}
+          {/*    backgroundRepeat: "repeat",*/}
+          {/*    filter: "opacity(0.02)",*/}
+          {/*    zIndex: 0,*/}
+          {/*  }}*/}
+          {/*></div>*/}
           <Box
             component="main"
-            sx={{ flex: 1, py: 6, px: 4, bgcolor: "#eaeff1" }}
+            sx={{
+              flex: 1,
+              py: 6,
+              px: 4,
+              // bgcolor: "#F0F8FF", // бледно бледно серый: #eaeff1
+              zIndex: 1,
+            }}
           >
             <Outlet />
           </Box>
-          {/*<Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>*/}
-          {/*  <Copyright />*/}
-          {/*</Box>*/}
         </Box>
       </Box>
     </ThemeProvider>

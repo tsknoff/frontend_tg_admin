@@ -7,16 +7,13 @@ import Button from "@mui/material/Button";
 import GroupIcon from "@mui/icons-material/Group";
 import EmailIcon from "@mui/icons-material/Email";
 import BarChartIcon from "@mui/icons-material/BarChart";
+import { useDashboardStyles } from "./styles.ts";
 
-export const MenuButtonsPage = () => {
+export const DashboardPage = () => {
+  const { classes } = useDashboardStyles();
+
   return (
-    <Box
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "50px",
-      }}
-    >
+    <Box className={classes.root}>
       <Box>
         <Typography
           variant="body1"
@@ -29,41 +26,17 @@ export const MenuButtonsPage = () => {
           }
         </Typography>
       </Box>
-      <Box
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          gap: "2rem",
-          flexWrap: "wrap",
-        }}
-      >
+      <Box className={classes.widgetsWrapper}>
         <ButtonsWidget />
         <GreetingWidget />
         <AgreeWidget />
-        {/*Explore statistics of your bot*/}
       </Box>
-      <Box
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          gap: "50px",
-          flexWrap: "wrap",
-        }}
-      >
+      <Box className={classes.actionButtons}>
         <Button
           variant="outlined"
           href="/groups"
           startIcon={<GroupIcon sx={{ width: 34, height: 34 }} />}
-          style={{
-            width: "200px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "darkslategray",
-          }}
+          className={classes.button}
         >
           Управление группами
         </Button>
@@ -71,14 +44,7 @@ export const MenuButtonsPage = () => {
           variant="outlined"
           href="/email"
           startIcon={<EmailIcon sx={{ width: 34, height: 34 }} />}
-          style={{
-            width: "200px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "darkslategray",
-          }}
+          className={classes.button}
         >
           Сделать рассылку
         </Button>
@@ -87,14 +53,7 @@ export const MenuButtonsPage = () => {
           color="primary"
           href="/statistics"
           startIcon={<BarChartIcon sx={{ width: 34, height: 34 }} />}
-          style={{
-            width: "200px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "darkslategray",
-          }}
+          className={classes.button}
         >
           Посмотреть статистику
         </Button>

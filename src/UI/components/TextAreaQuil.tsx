@@ -4,19 +4,24 @@ import "react-quill/dist/quill.snow.css";
 
 // Изменение тегов по умолчанию для bold и italic
 const Bold = Quill.import("formats/bold");
+// @ts-ignore
 Bold.tagName = "b"; // Quill uses <strong> by default
+// @ts-ignore
 Quill.register(Bold, true);
 
 const Italic = Quill.import("formats/italic");
+// @ts-ignore
 Italic.tagName = "i"; // Quill uses <em> by default
+// @ts-ignore
 Quill.register(Italic, true);
 
 const Link = Quill.import("formats/link");
+// @ts-ignore
 Link.sanitize = (url) => {
   let sanitizedUrl = url;
   // Простая проверка для разрешения только HTTP и HTTPS ссылок
   if (!/^https?:\/\/.*/.test(sanitizedUrl)) {
-    sanitizedUrl = `http://${sanitizedUrl}`;
+    sanitizedUrl = `https://${sanitizedUrl}`;
   }
   return sanitizedUrl;
 };
