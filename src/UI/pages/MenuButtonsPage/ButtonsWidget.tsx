@@ -112,7 +112,7 @@ export const ButtonsWidget: React.FC = () => {
       >
         <Typography
           sx={{ my: 1, mx: 2 }}
-          color="text.secondary"
+          color="text.primary"
           align="left"
           variant="h6"
         >

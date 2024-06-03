@@ -4,8 +4,8 @@ export let theme = createTheme({
   palette: {
     primary: {
       light: "#acd4b4",
-      main: "#08A652",
-      dark: "#08A652",
+      main: "#acd4b4",
+      dark: "#40E0B1", // чуть светлее:
     },
   },
   typography: {
@@ -107,7 +107,7 @@ theme = {
       styleOverrides: {
         root: {
           "&.Mui-selected": {
-            color: "#08A652",
+            color: "#40E0B1",
           },
         },
       },

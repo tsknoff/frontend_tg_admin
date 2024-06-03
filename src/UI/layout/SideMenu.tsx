@@ -28,13 +28,13 @@ const categories = [
     id: "",
     children: [
       {
-        id: "Рассылка",
+        id: "Рассылки",
         icon: <Email />,
         url: "email",
         active: false,
       },
       {
-        id: "Управление группами",
+        id: "Группы",
         icon: <Group />,
         url: "groups",
         active: false,
@@ -89,7 +89,14 @@ export const SideMenu = (props: DrawerProps) => {
               <ListItemText sx={{ color: "#000" }}>{id}</ListItemText>
             </ListItem>
             {children.map(({ id: childId, icon, url }) => (
-              <Link to={url} style={{ textDecoration: "none" }} key={childId}>
+              <Link
+                to={url}
+                style={{
+                  textDecoration: "none",
+                  fontWeight: link.pathname === `/${url}` ? 800 : 100,
+                }}
+                key={childId}
+              >
                 <ListItem disablePadding>
                   <ListItemButton
                     selected={link.pathname === `/${url}`}

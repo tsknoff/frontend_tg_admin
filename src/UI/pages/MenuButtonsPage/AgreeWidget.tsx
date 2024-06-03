@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import HelpIcon from "@mui/icons-material/Help";
-import TextField from "@mui/material/TextField";
+import TextEditor from "../../components/TextAreaQuil.tsx";
 
 export const AgreeWidget = () => {
   return (
@@ -17,7 +17,6 @@ export const AgreeWidget = () => {
       sx={{
         maxWidth: 400,
         margin: "0",
-        overflow: "hidden",
         alignSelf: "flex-start",
       }}
     >
@@ -31,7 +30,7 @@ export const AgreeWidget = () => {
       >
         <Typography
           sx={{ my: 1, mx: 2 }}
-          color="text.secondary"
+          color="text.primary"
           align="left"
           variant="h6"
         >
@@ -45,37 +44,19 @@ export const AgreeWidget = () => {
           </IconButton>
         </Tooltip>
       </Box>
+
       <Box
         style={{
           padding: "10px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
+          height: "400px",
         }}
       >
-        <TextField
-          label={"Сообщение о согласии"}
-          placeholder="Привет! Я бот-помощник. Чем могу помочь?"
-          multiline
-          rows={10}
-          rowsMax={Infinity}
-          defaultValue="Для продолжения работы с ботом необходимо дать согласие на обработку персональных данных."
-          style={{
-            padding: "10px",
-            width: "100%",
-          }}
-        />
-        {/* Ссылка на документ с соглашением */}
-        <TextField
-          label={"Ссылка на документ с соглашением"}
-          placeholder="Ссылка на документ с соглашением"
-          multiline
-          rows={1}
-          rowsMax={Infinity}
-          defaultValue="https://example.com/agreement"
-          style={{
-            padding: "10px",
-            width: "100%",
+        <TextEditor
+          currentValue={
+            '<p><b>раз</b> <i>два</i> <u>три</u> <s>четыре</s> <a href="https://sendpulse.com/knowledge-base/chatbot/telegram/format-text" rel="noopener noreferrer" target="_blank">пять</a></p>'
+          }
+          onChange={(value) => {
+            console.log(value);
           }}
         />
       </Box>

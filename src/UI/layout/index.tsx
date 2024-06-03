@@ -61,9 +61,9 @@ export const Root = () => {
           >
             <Outlet />
           </Box>
-          <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
-            <Copyright />
-          </Box>
+          {/*<Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>*/}
+          {/*  <Copyright />*/}
+          {/*</Box>*/}
         </Box>
       </Box>
     </ThemeProvider>

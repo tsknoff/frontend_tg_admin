@@ -36,7 +36,13 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
 
   return (
     <>
-      <AppBar color="primary" position="sticky" elevation={0}>
+      <AppBar
+        position="sticky"
+        elevation={0}
+        style={{
+          background: "linear-gradient(45deg, #40E0B1 30%, #acd4b4 80%)",
+        }}
+      >
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
             <Grid sx={{ display: { sm: "none", xs: "block" } }} item>
@@ -49,11 +55,11 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
                 <MenuIcon />
               </IconButton>
             </Grid>
-            <Grid item>
-              <Typography variant="h6" component="h1">
-                {title}
-              </Typography>
-            </Grid>
+            {/*<Grid item>*/}
+            {/*  <Typography variant="h6" component="h1">*/}
+            {/*    {title}*/}
+            {/*  </Typography>*/}
+            {/*</Grid>*/}
             <Grid item xs />
             <Grid item>
               <Box
@@ -74,6 +80,25 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
             </Grid>
           </Grid>
         </Toolbar>
+        <AppBar
+          component="div"
+          position="sticky"
+          elevation={0}
+          sx={{
+            zIndex: 0,
+            background: "linear-gradient(45deg, #40E0B1 30%, #acd4b4 80%)",
+          }}
+        >
+          <Toolbar>
+            <Grid container alignItems="center" spacing={1}>
+              <Grid item xs>
+                <Typography color="inherit" variant="h5" component="h1">
+                  {title}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Toolbar>
+        </AppBar>
       </AppBar>
     </>
   );

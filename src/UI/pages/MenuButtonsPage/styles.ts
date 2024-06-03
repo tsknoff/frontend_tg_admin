@@ -10,10 +10,15 @@ export const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
   justifyContent: "space-between",
   alignItems: "center",
   width: "360px",
+  height: "50px",
 
   // change background colour if dragging
   // Нужен очень бледно-серый цвет например #f0f0f0
-  background: isDragging ? "#acd4b4" : "#f0f0f0",
+  // Еще бледнее #f5f5f5
+  // Еще бледнее #f8f8f8
+  // acd4b4 сделать более бледным, например #acd4b4
+
+  background: isDragging ? "#acd4b4" : "#f8f8f8",
 
   // styles we need to apply on draggables
   ...draggableStyle,

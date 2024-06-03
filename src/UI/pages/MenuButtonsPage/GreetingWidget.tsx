@@ -9,15 +9,14 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import HelpIcon from "@mui/icons-material/Help";
-import TextField from "@mui/material/TextField";
+import TextEditor from "../../components/TextAreaQuil.tsx";
 
 export const GreetingWidget = () => {
   return (
     <Paper
       sx={{
-        maxWidth: 380,
+        maxWidth: 400,
         margin: "0",
-        overflow: "hidden",
         alignSelf: "flex-start",
       }}
     >
@@ -31,7 +30,7 @@ export const GreetingWidget = () => {
       >
         <Typography
           sx={{ my: 1, mx: 2 }}
-          color="text.secondary"
+          color="text.primary"
           align="left"
           variant="h6"
         >
@@ -47,17 +46,21 @@ export const GreetingWidget = () => {
           </IconButton>
         </Tooltip>
       </Box>
-      <TextField
-        placeholder="Привет! Я бот-помощник. Чем могу помочь?"
-        multiline
-        rows={10}
-        rowsMax={Infinity}
-        defaultValue="Привет! Данный бот предназначен для помощи вам в использовании нашего сервиса. Чем могу помочь?"
+      <Box
         style={{
           padding: "10px",
-          width: "100%",
+          height: "400px",
         }}
-      />
+      >
+        <TextEditor
+          currentValue={
+            '<p><b>раз</b> <i>два</i> <u>три</u> <s>четыре</s> <a href="https://sendpulse.com/knowledge-base/chatbot/telegram/format-text" rel="noopener noreferrer" target="_blank">пять</a></p>'
+          }
+          onChange={(value) => {
+            console.log(value);
+          }}
+        />
+      </Box>
 
       <AppBar
         position="static"
