@@ -115,7 +115,7 @@ theme = {
     MuiListItemText: {
       styleOverrides: {
         primary: {
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: theme.typography.fontWeightMedium,
         },
       },

@@ -11,51 +11,42 @@ import Paper from "@mui/material/Paper";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { AppDispatch, RootState } from "../../../store.ts";
+import { AppDispatch, RootState } from "../../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchButtons } from "../../../features/buttons/buttonSlice.ts";
-
-interface ITelegramButtonDTO {
-  id: string;
-  text: string;
-}
-
-const telegramButtonDTO: ITelegramButtonDTO[] = [
-  {
-    id: "1",
-    text: "Игра 1",
-  },
-  {
-    id: "2",
-    text: "Игра 2",
-  },
-  {
-    id: "3",
-    text: "Игра 3",
-  },
-  {
-    id: "4",
-    text: "Игра 4",
-  },
-  {
-    id: "5",
-    text: "Игра 5",
-  },
-];
+import {
+  addButton,
+  deleteButton,
+  fetchButtons,
+  reorderButtons,
+  TGMenuButton,
+} from "../../../features/buttons/buttonSlice";
+import { getItemStyle, getListStyle } from "./styles";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const MenuButtonsPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const buttons = useSelector((state: RootState) => state.buttons.buttons);
   const status = useSelector((state: RootState) => state.buttons.status);
 
-  // try to fetch buttons from the server
+  const [items, setItems] = useState<TGMenuButton[]>([]);
+  const [orderChanged, setOrderChanged] = useState(false);
+
   useEffect(() => {
-    dispatch(fetchButtons());
-  }, [dispatch]);
+    if (status === "idle") {
+      dispatch(fetchButtons());
+    }
+  }, [status, dispatch]);
 
-  const [items, setItems] = useState(telegramButtonDTO);
+  useEffect(() => {
+    setItems(buttons);
+    setOrderChanged(false);
+  }, [buttons]);
 
-  const reorder = (list, startIndex, endIndex) => {
+  const reorder = (
+    list: TGMenuButton[],
+    startIndex: number,
+    endIndex: number,
+  ) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -63,7 +54,10 @@ export const MenuButtonsPage: React.FC = () => {
     return result;
   };
 
-  const handleOnDragEnd = (result) => {
+  const handleOnDragEnd = (result: {
+    destination: { index: any };
+    source: { index: any };
+  }) => {
     if (!result.destination) {
       return;
     }
@@ -77,42 +71,97 @@ export const MenuButtonsPage: React.FC = () => {
     setItems(newItems);
   };
 
-  const grid = 8;
+  useEffect(() => {
+    const isOrderChanged = items.every(
+      (item, index) => item.id === buttons[index].id,
+    );
+    setOrderChanged(!isOrderChanged);
+  }, [buttons, items]);
 
-  const getItemStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the items look a bit nicer
-    userSelect: "none",
-    padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
-    borderRadius: "5px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "360px",
+  const handleSaveOrder = () => {
+    // Здесь нужно отправить запрос на сервер для сохранения нового порядка
 
-    // change background colour if dragging
-    background: isDragging ? "#acd4b4" : "#dadada",
+    const newOrder = items.map((item) => item.id);
+    dispatch(reorderButtons(newOrder));
 
-    // styles we need to apply on draggables
-    ...draggableStyle,
-  });
+    setOrderChanged(false);
+  };
 
-  const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? "#fff" : "#fff",
-    padding: grid,
-    width: 250,
-  });
+  const handleAddButton = () => {
+    // promt с двумя полями Button name и Button link
+    const name = prompt("Введите название кнопки", "Новая кнопка");
+    if (name) {
+      dispatch(addButton(name));
+    }
+  };
 
   return (
     <Paper sx={{ maxWidth: 380, margin: "auto", overflow: "hidden" }}>
       <Typography
-        sx={{ my: 5, mx: 2 }}
+        sx={{ my: 1, mx: 2 }}
         color="text.secondary"
-        align="center"
+        align="left"
         variant="h6"
       >
-        Здесь можно настроить кнопки отображаемые в меню сообщения
+        Кнопки отображаемые в меню:
       </Typography>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        {status === "loading" ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "200px",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Droppable droppableId="droppable">
+            {(provided, snapshot) => (
+              <Box
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={getListStyle(snapshot.isDraggingOver)}
+              >
+                {items.map((item, index) => (
+                  <Draggable
+                    key={item.id}
+                    draggableId={String(item.id)}
+                    index={index}
+                  >
+                    {(provided, snapshot) => (
+                      <Box
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={getItemStyle(
+                          snapshot.isDragging,
+                          provided.draggableProps.style,
+                        )}
+                      >
+                        {item.name}
+                        <IconButton
+                          aria-label="delete"
+                          size="small"
+                          sx={{ float: "right" }}
+                          onClick={() => {
+                            dispatch(deleteButton(item.id));
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </Box>
+            )}
+          </Droppable>
+        )}
+      </DragDropContext>
       <AppBar
         position="static"
         color="default"
@@ -120,16 +169,33 @@ export const MenuButtonsPage: React.FC = () => {
         sx={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
       >
         <Toolbar>
-          <Grid container spacing={2} alignItems="center">
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            style={{
+              paddingTop: "10px",
+              paddingBottom: "10px",
+            }}
+          >
             <Grid item>
-              <Button variant="contained" sx={{ mr: 1 }}>
+              <Button
+                variant="contained"
+                sx={{ mr: 2 }}
+                disabled={!orderChanged}
+                onClick={handleSaveOrder}
+              >
                 Сохранить
               </Button>
-              <Button variant="contained" sx={{ mr: 1 }}>
+              <Button
+                variant="contained"
+                sx={{ mr: 2 }}
+                onClick={handleAddButton}
+              >
                 Добавить кнопку
               </Button>
               <Tooltip title="Reload">
-                <IconButton>
+                <IconButton onClick={() => dispatch(fetchButtons())}>
                   <RefreshIcon color="inherit" sx={{ display: "block" }} />
                 </IconButton>
               </Tooltip>
@@ -137,50 +203,6 @@ export const MenuButtonsPage: React.FC = () => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <Box
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={getListStyle(snapshot.isDraggingOver)}
-            >
-              {items.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided, snapshot) => (
-                    <Box
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style,
-                      )}
-                    >
-                      {item.text}
-                      {/* Delete Icon */}
-                      <IconButton
-                        aria-label="delete"
-                        size="small"
-                        sx={{ float: "right" }}
-                        onClick={() => {
-                          const newItems = items.filter(
-                            (el) => el.id !== item.id,
-                          );
-                          setItems(newItems);
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </Box>
-          )}
-        </Droppable>
-      </DragDropContext>
     </Paper>
   );
 };

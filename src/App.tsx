@@ -1,7 +1,38 @@
-import { Layout } from "./UI/layout";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Root } from "./routes";
+import { MenuButtonsPage } from "./UI/pages/MenuButtonsPage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
+        path: "/buttons",
+        element: <MenuButtonsPage />,
+      },
+      {
+        path: "/email",
+        element: <div>Email</div>,
+      },
+      {
+        path: "/groups",
+        element: <div>Groups</div>,
+      },
+      {
+        path: "/statistics",
+        element: <div>Statistics</div>,
+      },
+      {
+        path: "/greeting",
+        element: <div>Greeting</div>,
+      },
+    ],
+  },
+]);
 
 function App() {
-  return <Layout />;
+  return <RouterProvider router={router} />;
 }
 
 export default App;

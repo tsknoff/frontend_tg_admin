@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface Button {
+export interface TGMenuButton {
   id: number;
   name: string;
 }
 
 interface ButtonsState {
-  buttons: Button[];
+  buttons: TGMenuButton[];
   status: "idle" | "loading" | "succeeded" | "failed";
 }
 
@@ -20,7 +20,7 @@ const initialState: ButtonsState = {
 export const fetchButtons = createAsyncThunk(
   "buttons/fetchButtons",
   async () => {
-    const response = await axios.get<Button[]>("/api/button");
+    const response = await axios.get<TGMenuButton[]>("/api/button");
     return response.data;
   },
 );
@@ -60,7 +60,7 @@ const buttonsSlice = createSlice({
       })
       .addCase(
         fetchButtons.fulfilled,
-        (state, action: PayloadAction<Button[]>) => {
+        (state, action: PayloadAction<TGMenuButton[]>) => {
           state.status = "succeeded";
           state.buttons = action.payload;
         },
@@ -68,9 +68,12 @@ const buttonsSlice = createSlice({
       .addCase(fetchButtons.rejected, (state) => {
         state.status = "failed";
       })
-      .addCase(addButton.fulfilled, (state, action: PayloadAction<Button>) => {
-        state.buttons.push(action.payload);
-      })
+      .addCase(
+        addButton.fulfilled,
+        (state, action: PayloadAction<TGMenuButton>) => {
+          state.buttons.push(action.payload);
+        },
+      )
       .addCase(
         reorderButtons.fulfilled,
         (state, action: PayloadAction<number[]>) => {

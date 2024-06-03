@@ -11,6 +11,7 @@ import Email from "@mui/icons-material/Email";
 import Group from "@mui/icons-material/Group";
 import BarChart from "@mui/icons-material/BarChart";
 import EmojiEvents from "@mui/icons-material/EmojiEvents";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
@@ -19,26 +20,31 @@ const categories = [
       {
         id: "Управление меню",
         icon: <MenuBook />,
+        url: "buttons",
         active: true,
       },
       {
         id: "Рассылка",
         icon: <Email />,
+        url: "email",
         active: false,
       },
       {
         id: "Управление группами",
         icon: <Group />,
+        url: "groups",
         active: false,
       },
       {
         id: "Статистика",
         icon: <BarChart />,
+        url: "statistics",
         active: false,
       },
       {
         id: "Приветствие",
         icon: <EmojiEvents />,
+        url: "greeting",
         active: false,
       },
     ],
@@ -77,19 +83,21 @@ export const SideMenu = (props: DrawerProps) => {
             {/*<ListItem sx={{ py: 2, px: 3 }}>*/}
             {/*  <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>*/}
             {/*</ListItem>*/}
-            {children.map(({ id: childId, icon, active }) => (
-              <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={item}>
-                  <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText
-                    style={{
-                      color: "#000",
-                    }}
-                  >
-                    {childId}
-                  </ListItemText>
-                </ListItemButton>
-              </ListItem>
+            {children.map(({ id: childId, icon, active, url }) => (
+              <Link to={url} style={{ textDecoration: "none" }} key={childId}>
+                <ListItem disablePadding>
+                  <ListItemButton selected={active} sx={item}>
+                    <ListItemIcon>{icon}</ListItemIcon>
+                    <ListItemText
+                      style={{
+                        color: "#000",
+                      }}
+                    >
+                      {childId}
+                    </ListItemText>
+                  </ListItemButton>
+                </ListItem>
+              </Link>
             ))}
             <Divider sx={{ mt: 2 }} />
           </Box>
