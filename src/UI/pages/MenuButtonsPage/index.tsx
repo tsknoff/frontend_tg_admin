@@ -54,10 +54,7 @@ export const MenuButtonsPage: React.FC = () => {
     return result;
   };
 
-  const handleOnDragEnd = (result: {
-    destination: { index: any };
-    source: { index: any };
-  }) => {
+  const handleOnDragEnd = (result: any) => {
     if (!result.destination) {
       return;
     }
