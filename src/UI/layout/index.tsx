@@ -8,7 +8,7 @@ import { theme } from "../theme.ts";
 import { SideMenu } from "./SideMenu.tsx";
 import { Header } from "./Header.tsx";
 
-const drawerWidth = 256;
+const drawerWidth = 200;
 
 export const Root = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -41,30 +41,7 @@ export const Root = () => {
         </Box>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <Header onDrawerToggle={handleDrawerToggle} />
-          {/*<div*/}
-          {/*  style={{*/}
-          {/*    position: "absolute",*/}
-          {/*    width: "100%",*/}
-          {/*    height: "100%",*/}
-          {/*    backgroundImage: "url('assets/bg.webp')",*/}
-          {/*    backgroundSize: "300px",*/}
-          {/*    backgroundRepeat: "repeat",*/}
-          {/*    filter: "opacity(0.02)",*/}
-          {/*    zIndex: 0,*/}
-          {/*  }}*/}
-          {/*></div>*/}
-          <Box
-            component="main"
-            sx={{
-              flex: 1,
-              py: 6,
-              px: 4,
-              // bgcolor: "#F0F8FF", // бледно бледно серый: #eaeff1
-              zIndex: 1,
-            }}
-          >
-            <Outlet />
-          </Box>
+          <Outlet />
         </Box>
       </Box>
     </ThemeProvider>

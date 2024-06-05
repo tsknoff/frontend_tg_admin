@@ -10,7 +10,7 @@ export const routes = [
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/dashboard",
+        path: "/",
         index: true,
         element: <DashboardPage />,
       },

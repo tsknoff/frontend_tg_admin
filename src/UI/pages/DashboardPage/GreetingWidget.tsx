@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import HelpIcon from "@mui/icons-material/Help";
-import TextEditor from "../../components/TextAreaQuil.tsx";
+import TextEditor from "../../components/TextEditor.tsx";
 
 export const GreetingWidget = () => {
   return (
@@ -57,7 +57,7 @@ export const GreetingWidget = () => {
             '<p><b>раз</b> <i>два</i> <u>три</u> <s>четыре</s> <a href="https://sendpulse.com/knowledge-base/chatbot/telegram/format-text" rel="noopener noreferrer" target="_blank">пять</a></p>'
           }
           onChange={(value) => {
-            console.log(value);
+            // console.log(value);
           }}
         />
       </Box>

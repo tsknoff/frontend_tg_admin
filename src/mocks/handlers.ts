@@ -2,8 +2,7 @@ import { http, HttpResponse, delay } from "msw";
 
 export const handlers = [
   http.all("*", async () => {
-    console.log(process.env.NODE_ENV);
-    await delay(process.env.NODE_ENV === "development" ? 500 : 0);
+    await delay(process.env.NODE_ENV === "development" ? 1000 : 0);
   }),
 
   // Обработчик GET-запроса на получение кнопок
@@ -28,6 +27,19 @@ export const handlers = [
 
   // Обработчик DELETE-запроса на удаление кнопки
   http.delete("/api/button", () => {
+    return HttpResponse.json({ response: "success" });
+  }),
+
+  // Обработчик GET-запроса на получение приветственного сообщения
+  http.get("/api/greeting", () => {
+    return HttpResponse.json({
+      message:
+        '<p><b>раз</b> <i>два</i> <u>три</u> <s>четыре</s> <a href="https://sendpulse.com/knowledge-base/chatbot/telegram/format-text" rel="noopener noreferrer" target="_blank">пять</a></p>',
+    });
+  }),
+
+  // Обработчик POST-запроса на изменение приветственного сообщения
+  http.post("/api/greeting", () => {
     return HttpResponse.json({ response: "success" });
   }),
 ];

@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import buttonsReducer from "./features/buttons/buttonSlice";
+import greetingReducer from "./features/greeting/greetingSlice";
 
 const store = configureStore({
   reducer: {
     buttons: buttonsReducer,
+    greeting: greetingReducer,
   },
 });
 

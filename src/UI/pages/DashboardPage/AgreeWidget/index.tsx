@@ -7,11 +7,22 @@ import IconButton from "@mui/material/IconButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import HelpIcon from "@mui/icons-material/Help";
-import TextEditor from "../../components/TextAreaQuil.tsx";
+import TextEditor from "../../../components/TextEditor.tsx";
+import { useAgreeWidgetStyles } from "./styles.ts";
+import { HeaderComponent } from "./HeaderComponent.tsx";
+import { useGreetingViewModel } from "./useGreetingViewModel.ts";
 
 export const AgreeWidget = () => {
+  const { classes } = useAgreeWidgetStyles();
+  const {
+    message,
+    status,
+    newMessage,
+    setNewMessage,
+    handleUpdateGreeting,
+    handleFetchGreeting,
+  } = useGreetingViewModel();
+
   return (
     <Paper
       sx={{
@@ -20,44 +31,12 @@ export const AgreeWidget = () => {
         alignSelf: "flex-start",
       }}
     >
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "10px",
-        }}
-      >
-        <Typography
-          sx={{ my: 1, mx: 2 }}
-          color="text.primary"
-          align="left"
-          variant="h6"
-        >
-          Сообщение о согласии
-        </Typography>
-        <Tooltip
-          title={"Сообщение о согласии на обработку персональных данных"}
-        >
-          <IconButton>
-            <HelpIcon color="inherit" sx={{ display: "block" }} />
-          </IconButton>
-        </Tooltip>
-      </Box>
-
-      <Box
-        style={{
-          padding: "10px",
-          height: "400px",
-        }}
-      >
+      <HeaderComponent />
+      <Box className={classes.textEditorWrapper}>
         <TextEditor
-          currentValue={
-            '<p><b>раз</b> <i>два</i> <u>три</u> <s>четыре</s> <a href="https://sendpulse.com/knowledge-base/chatbot/telegram/format-text" rel="noopener noreferrer" target="_blank">пять</a></p>'
-          }
-          onChange={(value) => {
-            console.log(value);
-          }}
+          loading={status === "loading"}
+          currentValue={message}
+          onChange={setNewMessage}
         />
       </Box>
 
@@ -79,11 +58,20 @@ export const AgreeWidget = () => {
           >
             <Grid item>
               <Tooltip title="Сохранить новое приветственное сообщение">
-                <Button variant="contained" sx={{ mr: 2 }}>
+                <Button
+                  onClick={handleUpdateGreeting}
+                  variant="contained"
+                  sx={{ mr: 2 }}
+                  disabled={
+                    status === "loading" ||
+                    newMessage === "<p><br></p>" ||
+                    newMessage === message
+                  }
+                >
                   Сохранить
                 </Button>
               </Tooltip>
-              <IconButton>
+              <IconButton onClick={handleFetchGreeting}>
                 <RefreshIcon color="inherit" sx={{ display: "block" }} />
               </IconButton>
             </Grid>

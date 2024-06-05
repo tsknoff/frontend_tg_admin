@@ -1,6 +1,8 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { CircularProgress } from "@mui/material";
+import Box from "@mui/material/Box";
 
 // Изменение тегов по умолчанию для bold и italic
 const Bold = Quill.import("formats/bold");
@@ -26,29 +28,52 @@ Link.sanitize = (url) => {
   return sanitizedUrl;
 };
 
+const modules = {
+  toolbar: [
+    [],
+    [],
+    ["bold", "italic", "underline", "strike"],
+    [],
+    ["link"],
+    ["clean"],
+  ],
+};
+
 interface ITextEditorProps {
+  loading: boolean;
   currentValue: string;
   onChange: (value: string) => void;
 }
 
-const TextEditor: FC<ITextEditorProps> = ({ currentValue, onChange }) => {
+const TextEditor: FC<ITextEditorProps> = ({
+  loading,
+  currentValue,
+  onChange,
+}) => {
   const [value, setValue] = useState(currentValue);
-
-  const modules = {
-    toolbar: [
-      [],
-      [],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [],
-      ["link"],
-      ["clean"],
-    ],
-  };
 
   const handleChange = (value: string) => {
     setValue(value);
     onChange(value);
   };
+
+  useEffect(() => {
+    setValue(currentValue);
+  }, [currentValue]);
+
+  if (loading) {
+    return (
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <ReactQuill

@@ -8,7 +8,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import HelpIcon from "@mui/icons-material/Help";
-import TextEditor from "../../components/TextAreaQuil.tsx";
+import TextEditor from "../../components/TextEditor.tsx";
 import {
   FormControl,
   MenuItem,
@@ -18,7 +18,7 @@ import {
 import { useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 
-export const MailForm = () => {
+export const MailFormWidget = () => {
   const [age, setAge] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -80,13 +80,14 @@ export const MailForm = () => {
             align="left"
             variant="h6"
           >
-            Сообщение всем участникам
+            Сообщение участникам
           </Typography>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <Select
               value={age}
               onChange={handleChange}
               displayEmpty
+              size={"small"}
               inputProps={{ "aria-label": "Without label" }}
             >
               <MenuItem value="">
@@ -121,7 +122,7 @@ export const MailForm = () => {
               '<p><b>раз</b> <i>два</i> <u>три</u> <s>четыре</s> <a href="https://sendpulse.com/knowledge-base/chatbot/telegram/format-text" rel="noopener noreferrer" target="_blank">пять</a></p>'
             }
             onChange={(value) => {
-              console.log(value);
+              // console.log(value);
             }}
           />
         </Box>
@@ -150,11 +151,21 @@ export const MailForm = () => {
             </Button>
           </label>
           {imagePreview && (
-            <Box mt={2} textAlign="center" position="relative">
+            <Paper
+              style={{
+                position: "relative",
+                padding: "10px",
+                width: "fit-content",
+                height: "fit-content",
+              }}
+            >
               <img
                 src={imagePreview}
                 alt="Preview"
-                style={{ maxWidth: "400px", maxHeight: "400px" }}
+                style={{
+                  maxWidth: "200px",
+                  maxHeight: "200px",
+                }}
               />
               <IconButton
                 onClick={handleClearImage}
@@ -168,7 +179,7 @@ export const MailForm = () => {
               >
                 <ClearIcon />
               </IconButton>
-            </Box>
+            </Paper>
           )}
         </Box>
 

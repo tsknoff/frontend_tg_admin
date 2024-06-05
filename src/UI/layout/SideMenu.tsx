@@ -19,7 +19,7 @@ const categories = [
       {
         id: "Dashboard",
         icon: <DashboardIcon />,
-        url: "dashboard",
+        url: "",
         active: true,
       },
     ],

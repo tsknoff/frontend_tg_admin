@@ -22,7 +22,7 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
       title = "Dashboard";
       break;
     case "/email":
-      title = "Рассылка";
+      title = "Рассылки";
       break;
     case "/groups":
       title = "Управление группами";
@@ -42,7 +42,7 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
         height: "70px",
         display: "flex",
         justifyContent: "center",
-        background: "linear-gradient(45deg, #40E0B1 30%, #acd4b4 80%)",
+        background: "linear-gradient(60deg, #40E0B1 18%, #EAEFF1 10%)",
       }}
     >
       <Toolbar>
