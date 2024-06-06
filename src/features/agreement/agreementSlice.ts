@@ -1,12 +1,11 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const fetchGreeting = createAsyncThunk(
-  "greeting/fetchGreeting",
+export const fetchAgreement = createAsyncThunk(
+  "agreement/fetchAgreement",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/greeting");
+      const response = await axios.get("/api/agreement");
       return response.data.message;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -14,17 +13,17 @@ export const fetchGreeting = createAsyncThunk(
   },
 );
 
-export const updateGreeting = createAsyncThunk(
-  "greeting/updateGreeting",
+export const updateAgreement = createAsyncThunk(
+  "agreement/updateAgreement",
   async (message: string, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/greeting", { message });
+      const response = await axios.post("/api/agreement", { message });
       if (response.data.response === "success") {
-        await dispatch(fetchGreeting());
+        await dispatch(fetchAgreement());
 
         return message;
       } else {
-        return rejectWithValue("Failed to update greeting");
+        return rejectWithValue("Failed to update agreement");
       }
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -32,49 +31,49 @@ export const updateGreeting = createAsyncThunk(
   },
 );
 
-interface GreetingState {
+interface AgreementState {
   message: string;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
-const initialState: GreetingState = {
+const initialState: AgreementState = {
   message: "",
   status: "idle",
   error: null,
 };
 
-const greetingSlice = createSlice({
-  name: "greeting",
+const agreementSlice = createSlice({
+  name: "agreement",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchGreeting.pending, (state) => {
+      .addCase(fetchAgreement.pending, (state) => {
         state.status = "loading";
       })
       .addCase(
-        fetchGreeting.fulfilled,
+        fetchAgreement.fulfilled,
         (state, action: PayloadAction<string>) => {
           state.status = "succeeded";
           state.message = action.payload;
         },
       )
-      .addCase(fetchGreeting.rejected, (state, action) => {
+      .addCase(fetchAgreement.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       })
-      .addCase(updateGreeting.pending, (state) => {
+      .addCase(updateAgreement.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateGreeting.fulfilled, (state) => {
+      .addCase(updateAgreement.fulfilled, (state) => {
         state.status = "succeeded";
       })
-      .addCase(updateGreeting.rejected, (state, action) => {
+      .addCase(updateAgreement.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });
   },
 });
 
-export default greetingSlice.reducer;
+export default agreementSlice.reducer;

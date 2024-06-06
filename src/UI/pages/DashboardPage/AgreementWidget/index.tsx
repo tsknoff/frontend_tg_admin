@@ -2,26 +2,26 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import TextEditor from "../../../components/TextEditor.tsx";
-import { useAgreeWidgetStyles } from "./styles.ts";
-import { HeaderComponent } from "./HeaderComponent.tsx";
-import { useGreetingViewModel } from "./useGreetingViewModel.ts";
+import TextEditor from "../../../components/TextEditor";
+import { useAgreementWidgetStyles } from "./styles";
+import { HeaderComponent } from "./HeaderComponent";
+import { useAgreementViewModel } from "./useAgreementViewModel.ts";
 
-export const AgreeWidget = () => {
-  const { classes } = useAgreeWidgetStyles();
+export const AgreementWidget = () => {
+  const { classes } = useAgreementWidgetStyles();
   const {
     message,
     status,
-    newMessage,
-    setNewMessage,
-    handleUpdateGreeting,
-    handleFetchGreeting,
-  } = useGreetingViewModel();
+    draftMessage,
+    handleChange,
+    handleFetchAgreement,
+    handleUpdateAgreement,
+    clearFromPTags,
+  } = useAgreementViewModel();
 
   return (
     <Paper
@@ -35,8 +35,9 @@ export const AgreeWidget = () => {
       <Box className={classes.textEditorWrapper}>
         <TextEditor
           loading={status === "loading"}
-          currentValue={message}
-          onChange={setNewMessage}
+          currentValue={draftMessage}
+          onChange={handleChange}
+          style={{ height: "calc(100% - 50px)" }}
         />
       </Box>
 
@@ -57,21 +58,19 @@ export const AgreeWidget = () => {
             }}
           >
             <Grid item>
-              <Tooltip title="Сохранить новое приветственное сообщение">
-                <Button
-                  onClick={handleUpdateGreeting}
-                  variant="contained"
-                  sx={{ mr: 2 }}
-                  disabled={
-                    status === "loading" ||
-                    newMessage === "<p><br></p>" ||
-                    newMessage === message
-                  }
-                >
-                  Сохранить
-                </Button>
-              </Tooltip>
-              <IconButton onClick={handleFetchGreeting}>
+              <Button
+                onClick={handleUpdateAgreement}
+                variant="contained"
+                sx={{ mr: 2 }}
+                disabled={
+                  status === "loading" ||
+                  draftMessage === "<p><br></p>" ||
+                  clearFromPTags(draftMessage) === message
+                }
+              >
+                Сохранить
+              </Button>
+              <IconButton onClick={handleFetchAgreement}>
                 <RefreshIcon color="inherit" sx={{ display: "block" }} />
               </IconButton>
             </Grid>

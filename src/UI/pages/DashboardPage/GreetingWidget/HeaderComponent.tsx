@@ -3,10 +3,10 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import HelpIcon from "@mui/icons-material/Help";
 import Box from "@mui/material/Box";
-import { useAgreeWidgetStyles } from "./styles.ts";
+import { useGreetingWidgetStyles } from "./styles.ts";
 
 export const HeaderComponent = () => {
-  const { classes } = useAgreeWidgetStyles();
+  const { classes } = useGreetingWidgetStyles();
 
   return (
     <Box className={classes.header}>
@@ -16,9 +16,13 @@ export const HeaderComponent = () => {
         align="left"
         variant="h6"
       >
-        Сообщение о согласии
+        Приветственное сообщение
       </Typography>
-      <Tooltip title={"Сообщение о согласии на обработку персональных данных"}>
+      <Tooltip
+        title={
+          "Это сообщение отправляет бот при первом взаимодействии с пользователем"
+        }
+      >
         <IconButton>
           <HelpIcon color="inherit" sx={{ display: "block" }} />
         </IconButton>

@@ -12,9 +12,9 @@ import { useButtonsViewModel } from "./useButtonsViewModel.ts";
 import { HeaderComponent } from "./HeaderComponent.tsx";
 import { DraggableItemComponent } from "./DraggableItemComponent.tsx";
 import { getListStyle, useButtonsWidgetStyles } from "./styles.ts";
-import { Skeleton, Stack } from "@mui/material";
-
-// TODO: Implement Edit button
+import { Modal, Skeleton, Stack } from "@mui/material";
+import { useState } from "react";
+import { EditButtonModal } from "./EditButtonModal.tsx";
 
 export const ButtonsWidget = () => {
   const { classes } = useButtonsWidgetStyles();
@@ -29,8 +29,26 @@ export const ButtonsWidget = () => {
     handleDeleteButton,
   } = useButtonsViewModel();
 
+  const [editButtonId, setEditButtonId] = useState<number | null>(null);
+
+  const handleEditButton = (id: number) => () => {
+    setEditButtonId(id);
+  };
+
+  const handleClose = () => {
+    setEditButtonId(null);
+  };
+
   return (
     <Paper className={classes.root}>
+      <Modal
+        open={!!editButtonId}
+        onClose={handleClose}
+        aria-labelledby="child-modal-title"
+        aria-describedby="child-modal-description"
+      >
+        <EditButtonModal buttonId={editButtonId!} />
+      </Modal>
       <HeaderComponent />
       <DragDropContext onDragEnd={handleOnDragEnd}>
         {status === "loading" ? (
@@ -58,7 +76,7 @@ export const ButtonsWidget = () => {
                     <DraggableItemComponent
                       item={item}
                       index={index}
-                      onEdit={() => {}}
+                      onEdit={handleEditButton(item.id)}
                       onDelete={handleDeleteButton}
                     />
                   </div>

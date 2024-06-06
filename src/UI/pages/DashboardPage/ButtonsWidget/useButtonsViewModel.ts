@@ -74,10 +74,6 @@ export const useButtonsViewModel = () => {
   const handleAddButton = () => {
     const name = prompt("Введите название кнопки", "Новая кнопка");
     if (name) {
-      // Иногда кнопка добавляется, но не отображается
-      // Это происходит из-за того, что не успевает обновиться список кнопок
-      // Сделаем так, чтобы список кнопок обновлялся после добавления новой кнопки
-      // так как dispatch выполняется асинхронно,
       dispatch(addButton(name)).finally(() => {
         dispatch(fetchButtons());
       });

@@ -1,13 +1,13 @@
-import { ButtonsWidget } from "./ButtonsWidget";
 import Box from "@mui/material/Box";
-import { GreetingWidget } from "./GreetingWidget.tsx";
-import { AgreeWidget } from "./AgreeWidget";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import GroupIcon from "@mui/icons-material/Group";
 import EmailIcon from "@mui/icons-material/Email";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import { useDashboardStyles } from "./styles.ts";
+import { ButtonsWidget } from "./ButtonsWidget";
+import { GreetingWidget } from "./GreetingWidget";
+import { AgreementWidget } from "./AgreementWidget";
 
 export const DashboardPage = () => {
   const { classes } = useDashboardStyles();
@@ -39,7 +39,7 @@ export const DashboardPage = () => {
         <Box className={classes.widgetsWrapper}>
           <ButtonsWidget />
           <GreetingWidget />
-          <AgreeWidget />
+          <AgreementWidget />
         </Box>
         <Box className={classes.actionButtons}>
           <Button

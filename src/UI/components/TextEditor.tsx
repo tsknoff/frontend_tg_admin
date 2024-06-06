@@ -1,24 +1,21 @@
-import { FC, useEffect, useState } from "react";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { CSSProperties, FC } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
 
 // Изменение тегов по умолчанию для bold и italic
-const Bold = Quill.import("formats/bold");
-// @ts-ignore
+const Bold = Quill.import("formats/bold") as any;
 Bold.tagName = "b"; // Quill uses <strong> by default
-// @ts-ignore
 Quill.register(Bold, true);
 
-const Italic = Quill.import("formats/italic");
-// @ts-ignore
+const Italic = Quill.import("formats/italic") as any;
 Italic.tagName = "i"; // Quill uses <em> by default
-// @ts-ignore
 Quill.register(Italic, true);
 
-const Link = Quill.import("formats/link");
-// @ts-ignore
+const Link = Quill.import("formats/link") as any;
 Link.sanitize = (url) => {
   let sanitizedUrl = url;
   // Простая проверка для разрешения только HTTP и HTTPS ссылок
@@ -29,38 +26,24 @@ Link.sanitize = (url) => {
 };
 
 const modules = {
-  toolbar: [
-    [],
-    [],
-    ["bold", "italic", "underline", "strike"],
-    [],
-    ["link"],
-    ["clean"],
-  ],
+  toolbar: [["bold", "italic", "underline", "strike"], ["link"], ["clean"]],
 };
 
 interface ITextEditorProps {
   loading: boolean;
   currentValue: string;
+  placeholder?: string;
   onChange: (value: string) => void;
+  style?: CSSProperties;
 }
 
 const TextEditor: FC<ITextEditorProps> = ({
   loading,
   currentValue,
+  placeholder,
+  style,
   onChange,
 }) => {
-  const [value, setValue] = useState(currentValue);
-
-  const handleChange = (value: string) => {
-    setValue(value);
-    onChange(value);
-  };
-
-  useEffect(() => {
-    setValue(currentValue);
-  }, [currentValue]);
-
   if (loading) {
     return (
       <Box
@@ -77,11 +60,12 @@ const TextEditor: FC<ITextEditorProps> = ({
 
   return (
     <ReactQuill
-      value={value}
-      onChange={handleChange}
+      placeholder={placeholder}
+      value={currentValue}
+      onChange={onChange}
       modules={modules}
       theme="snow"
-      style={{ height: "calc(100% - 50px)" }}
+      style={style}
     />
   );
 };

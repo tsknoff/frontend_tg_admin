@@ -21,6 +21,7 @@ export const fetchButtons = createAsyncThunk(
   "buttons/fetchButtons",
   async () => {
     const response = await axios.get<IMenuButton[]>("/api/button");
+
     return response.data;
   },
 );
@@ -54,6 +55,7 @@ export const deleteButton = createAsyncThunk(
   "buttons/deleteButton",
   async (id: number) => {
     const response = await axios.delete("/api/button", { data: { id } });
+
     return response.data;
   },
 );
@@ -78,13 +80,9 @@ const buttonsSlice = createSlice({
       .addCase(fetchButtons.rejected, (state) => {
         state.status = "failed";
       })
-      .addCase(
-        addButton.fulfilled,
-        (state, action: PayloadAction<IMenuButton>) => {
-          // state.buttons.push(action.payload);
-          // todo: Разобраться и убрать этот костыль
-        },
-      )
+      .addCase(addButton.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
       .addCase(
         reorderButtons.fulfilled,
         (state, action: PayloadAction<number[]>) => {

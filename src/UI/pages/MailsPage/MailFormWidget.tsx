@@ -1,3 +1,4 @@
+// @ts-nocheck
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Grid from "@mui/material/Grid";
@@ -34,6 +35,8 @@ export const MailFormWidget = () => {
     // Создание предварительного просмотра изображения
     const reader = new FileReader();
     reader.onload = (e) => {
+      if (e.target?.result === null) return;
+
       setImagePreview(e.target.result);
     };
     reader.readAsDataURL(file);
@@ -118,12 +121,12 @@ export const MailFormWidget = () => {
           }}
         >
           <TextEditor
+            loading={false}
             currentValue={
               '<p><b>раз</b> <i>два</i> <u>три</u> <s>четыре</s> <a href="https://sendpulse.com/knowledge-base/chatbot/telegram/format-text" rel="noopener noreferrer" target="_blank">пять</a></p>'
             }
-            onChange={(value) => {
-              // console.log(value);
-            }}
+            style={{ height: "calc(100% - 50px)" }}
+            onChange={() => {}}
           />
         </Box>
 

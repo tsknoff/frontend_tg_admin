@@ -1,6 +1,6 @@
 import { tss } from "tss-react/mui";
 
-export const useAgreeWidgetStyles = tss.create({
+export const useGreetingWidgetStyles = tss.create({
   root: {
     maxWidth: 380,
     margin: "0",
