@@ -1,29 +1,27 @@
 import Box from "@mui/material/Box";
-import { FC } from "react";
+import { FC, useState } from "react";
 import TextEditor from "../../../components/TextEditor.tsx";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import RefreshIcon from "@mui/icons-material/Refresh";
+import { TextField } from "@mui/material";
+import { ImageAttach } from "../../../components/ImageAttach.tsx";
 
 interface IEditButtonModal {
   buttonId: number;
 }
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 500,
-  height: "400px",
+  height: "fit-content",
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  border: "1px solid #000",
+  borderRadius: 1,
   boxShadow: 24,
   display: "flex",
-  flexDirection: "column" as "column",
+  flexDirection: "column" as const,
   gap: 2,
   pt: 2,
   px: 4,
@@ -31,42 +29,39 @@ const style = {
 };
 
 export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileChange = (file: File | null) => {
+    console.log(selectedFile);
+    setSelectedFile(file);
+  };
+
   return (
     <Box sx={{ ...style }}>
       <h2 id="parent-modal-title">Button {buttonId}</h2>
-      <TextEditor
-        loading={false}
-        currentValue={""}
-        placeholder="Сообщение которое будет отправлено, когда пользователь нажмет на кнопку"
-        style={{ height: "calc(100% - 200px)" }}
-        onChange={() => {}}
+      <ImageAttach onFileChange={handleFileChange} />
+      <TextField
+        id="outlined-basic"
+        placeholder={"Текст кнопки"}
+        variant="outlined"
+        style={{ width: "100%" }}
       />
-      <AppBar
-        position="relative"
-        color="default"
-        elevation={0}
-        sx={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
+      <Box
+        style={{
+          height: "200px",
+        }}
       >
-        <Toolbar>
-          <Grid
-            container
-            alignItems="center"
-            style={{
-              marginTop: "10px",
-              marginBottom: "10px",
-            }}
-          >
-            <Grid item>
-              <Button variant="contained" sx={{ mr: 2 }} disabled={true}>
-                Сохранить
-              </Button>
-              <IconButton>
-                <RefreshIcon color="inherit" sx={{ display: "block" }} />
-              </IconButton>
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
+        <TextEditor
+          loading={false}
+          currentValue={""}
+          placeholder="Сообщение которое будет отправлено, когда пользователь нажмет на кнопку"
+          style={{ height: "calc(100% - 50px)" }}
+          onChange={() => {}}
+        />
+      </Box>
+      <Button variant="contained" color="primary">
+        Сохранить
+      </Button>
     </Box>
   );
 };

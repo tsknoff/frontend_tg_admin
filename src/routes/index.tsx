@@ -2,6 +2,7 @@ import { Root } from "../UI/layout";
 import { DashboardPage } from "../UI/pages/DashboardPage";
 import { ErrorPage } from "./ErrorPage.tsx";
 import { MailsPage } from "../UI/pages/MailsPage";
+import { StatChartPage } from "../UI/pages/StatChartPage";
 
 export const routes = [
   {
@@ -24,7 +25,7 @@ export const routes = [
       },
       {
         path: "/statistics",
-        element: <div>Statistics</div>,
+        element: <StatChartPage />,
       },
     ],
   },

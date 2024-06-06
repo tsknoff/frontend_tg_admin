@@ -59,7 +59,11 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
           </Grid>
           <Grid item>
             <Paper style={{ padding: "10px", borderRadius: "10px" }}>
-              <Typography variant="body1" color="textPrimary">
+              <Typography
+                variant="body2"
+                color="textPrimary"
+                style={{ fontWeight: "bold" }}
+              >
                 {title}
               </Typography>
             </Paper>

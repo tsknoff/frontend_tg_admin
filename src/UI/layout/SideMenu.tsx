@@ -11,7 +11,8 @@ import Email from "@mui/icons-material/Email";
 import Group from "@mui/icons-material/Group";
 import BarChart from "@mui/icons-material/BarChart";
 import { Link, useLocation } from "react-router-dom";
-
+import Button from "@mui/material/Button";
+import TelegramIcon from "@mui/icons-material/Telegram";
 const categories = [
   {
     id: "1",
@@ -81,7 +82,17 @@ export const SideMenu = (props: DrawerProps) => {
         <ListItem
           sx={{ ...item, ...itemCategory, fontSize: 22, color: "#000" }}
         >
-          @spasibo_bot
+          <Button
+            variant="contained"
+            href={"https://t.me/spasibo_bot"}
+            target={"_blank"}
+            endIcon={<TelegramIcon />}
+            style={{
+              color: "#fff",
+            }}
+          >
+            @spasibo_bot
+          </Button>
         </ListItem>
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#fff" }}>
