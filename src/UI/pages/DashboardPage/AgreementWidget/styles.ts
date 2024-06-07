@@ -2,9 +2,8 @@ import { tss } from "tss-react/mui";
 
 export const useAgreementWidgetStyles = tss.create({
   root: {
-    maxWidth: 380,
+    maxWidth: 400,
     margin: "0",
-    overflow: "hidden",
     alignSelf: "flex-start",
   },
   header: {

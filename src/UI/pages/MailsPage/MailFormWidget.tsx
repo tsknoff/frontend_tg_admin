@@ -8,7 +8,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import HelpIcon from "@mui/icons-material/Help";
-import TextEditor from "../../components/TextEditor.tsx";
+import TextEditor from "../../components/TextEditor";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { ImageAttach } from "../../components/ImageAttach.tsx";

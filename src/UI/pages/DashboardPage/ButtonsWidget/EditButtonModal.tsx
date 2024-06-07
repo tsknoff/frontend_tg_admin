@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import { FC, useState } from "react";
-import TextEditor from "../../../components/TextEditor.tsx";
+import TextEditor from "../../../components/TextEditor";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { ImageAttach } from "../../../components/ImageAttach.tsx";

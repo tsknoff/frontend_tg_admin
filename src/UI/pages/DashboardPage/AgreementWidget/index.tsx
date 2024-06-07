@@ -9,28 +9,30 @@ import Box from "@mui/material/Box";
 import TextEditor from "../../../components/TextEditor";
 import { useAgreementWidgetStyles } from "./styles";
 import { HeaderComponent } from "./HeaderComponent";
-import { useAgreementViewModel } from "./useAgreementViewModel.ts";
+import { useAgreementActions, useAgreementState } from "./hooks";
+import { useTextEditor } from "../../../components/TextEditor/useTextEditor.ts";
+import { useEffect } from "react";
 
 export const AgreementWidget = () => {
   const { classes } = useAgreementWidgetStyles();
-  const {
-    message,
-    status,
-    draftMessage,
-    handleChange,
-    handleFetchAgreement,
-    handleUpdateAgreement,
-    clearFromPTags,
-  } = useAgreementViewModel();
+
+  const { message, status } = useAgreementState();
+  const { fetchAgreementData, updateAgreementData } = useAgreementActions();
+  const { draftMessage, setDraftMessage, handleChange, clearFromPTags } =
+    useTextEditor(message);
+
+  useEffect(() => {
+    if (status === "idle") {
+      fetchAgreementData();
+    }
+  }, [status, fetchAgreementData]);
+
+  useEffect(() => {
+    setDraftMessage(message);
+  }, [message, setDraftMessage, status]);
 
   return (
-    <Paper
-      sx={{
-        maxWidth: 400,
-        margin: "0",
-        alignSelf: "flex-start",
-      }}
-    >
+    <Paper className={classes.root}>
       <HeaderComponent />
       <Box className={classes.textEditorWrapper}>
         <TextEditor
@@ -59,7 +61,9 @@ export const AgreementWidget = () => {
           >
             <Grid item>
               <Button
-                onClick={handleUpdateAgreement}
+                onClick={() =>
+                  updateAgreementData(clearFromPTags(draftMessage))
+                }
                 variant="contained"
                 sx={{ mr: 2 }}
                 disabled={
@@ -70,7 +74,7 @@ export const AgreementWidget = () => {
               >
                 Сохранить
               </Button>
-              <IconButton onClick={handleFetchAgreement}>
+              <IconButton onClick={fetchAgreementData}>
                 <RefreshIcon color="inherit" sx={{ display: "block" }} />
               </IconButton>
             </Grid>
