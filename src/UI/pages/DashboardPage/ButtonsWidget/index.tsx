@@ -8,7 +8,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import Paper from "@mui/material/Paper";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import Box from "@mui/material/Box";
-import { useButtonsViewModel } from "./useButtonsViewModel.ts";
+import { useButtonsWidget } from "./useButtonsWidget.ts";
 import { HeaderComponent } from "./HeaderComponent.tsx";
 import { DraggableItemComponent } from "./DraggableItemComponent.tsx";
 import { getListStyle, useButtonsWidgetStyles } from "./styles.ts";
@@ -27,7 +27,7 @@ export const ButtonsWidget = () => {
     handleSaveOrder,
     handleAddButton,
     handleDeleteButton,
-  } = useButtonsViewModel();
+  } = useButtonsWidget();
 
   const [editButtonId, setEditButtonId] = useState<number | null>(null);
 

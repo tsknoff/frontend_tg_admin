@@ -37,6 +37,13 @@ export const ImageAttach: FC<IImageAttachProps> = ({ onFileChange }) => {
     setSelectedFile(null);
     setImagePreview("");
     onFileChange(null);
+
+    const fileInput = document.getElementById(
+      "raised-button-file",
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
 
   return (
@@ -86,6 +93,7 @@ export const ImageAttach: FC<IImageAttachProps> = ({ onFileChange }) => {
             style={{
               width: "100%",
               height: "auto",
+              maxHeight: "200px",
             }}
           />
           <IconButton
@@ -96,6 +104,10 @@ export const ImageAttach: FC<IImageAttachProps> = ({ onFileChange }) => {
               right: 0,
               backgroundColor: "white",
               borderRadius: "50%",
+              animation: "none",
+              ":hover": {
+                backgroundColor: "white",
+              },
             }}
           >
             <ClearIcon />

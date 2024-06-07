@@ -9,7 +9,7 @@ import {
   IMenuButton,
 } from "../../../../features/buttons/buttonSlice.ts";
 
-export const useButtonsViewModel = () => {
+export const useButtonsWidget = () => {
   const dispatch: AppDispatch = useDispatch();
   const buttons = useSelector((state: RootState) => state.buttons.buttons);
   const status = useSelector((state: RootState) => state.buttons.status);

@@ -9,19 +9,28 @@ import Box from "@mui/material/Box";
 import TextEditor from "../../../components/TextEditor";
 import { useGreetingWidgetStyles } from "./styles";
 import { HeaderComponent } from "./HeaderComponent";
-import { useGreetingViewModel } from "./useGreetingViewModel.ts";
+import { useGreetingActions, useGreetingState } from "./hooks";
+import { useTextEditor } from "../../../components/TextEditor/useTextEditor.ts";
+import { useEffect } from "react";
 
 export const GreetingWidget = () => {
   const { classes } = useGreetingWidgetStyles();
-  const {
-    message,
-    status,
-    draftMessage,
-    handleChange,
-    handleFetchGreeting,
-    handleUpdateGreeting,
-    clearFromPTags,
-  } = useGreetingViewModel();
+
+  const { message, status } = useGreetingState();
+  const { fetchGreetingData, updateGreetingData } = useGreetingActions();
+
+  const { draftMessage, setDraftMessage, handleChange, clearFromPTags } =
+    useTextEditor(message);
+
+  useEffect(() => {
+    if (status === "idle") {
+      fetchGreetingData();
+    }
+  }, [status, fetchGreetingData]);
+
+  useEffect(() => {
+    setDraftMessage(message);
+  }, [message, setDraftMessage, status]);
 
   return (
     <Paper
@@ -59,8 +68,8 @@ export const GreetingWidget = () => {
           >
             <Grid item>
               <Button
-                onClick={handleUpdateGreeting}
-                variant="contained"
+                onClick={() => updateGreetingData(clearFromPTags(draftMessage))}
+                variant={"contained"}
                 sx={{ mr: 2 }}
                 disabled={
                   status === "loading" ||
@@ -70,7 +79,7 @@ export const GreetingWidget = () => {
               >
                 Сохранить
               </Button>
-              <IconButton onClick={handleFetchGreeting}>
+              <IconButton onClick={fetchGreetingData}>
                 <RefreshIcon color="inherit" sx={{ display: "block" }} />
               </IconButton>
             </Grid>

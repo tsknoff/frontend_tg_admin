@@ -29,3 +29,16 @@ export const useDashboardStyles = tss.create({
     color: "darkslategray",
   },
 });
+
+export const rootSxProps = {
+  flex: 1,
+  py: 6,
+  px: 4,
+  bgcolor: "#EAEFF1",
+  zIndex: 1,
+};
+
+export const iconSxProps = {
+  width: 34,
+  height: 34,
+};

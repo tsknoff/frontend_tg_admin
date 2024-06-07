@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import GroupIcon from "@mui/icons-material/Group";
 import EmailIcon from "@mui/icons-material/Email";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import { useDashboardStyles } from "./styles.ts";
+import { iconSxProps, rootSxProps, useDashboardStyles } from "./styles.ts";
 import { ButtonsWidget } from "./ButtonsWidget";
 import { GreetingWidget } from "./GreetingWidget";
 import { AgreementWidget } from "./AgreementWidget";
@@ -13,16 +13,7 @@ export const DashboardPage = () => {
   const { classes } = useDashboardStyles();
 
   return (
-    <Box
-      component="main"
-      sx={{
-        flex: 1,
-        py: 6,
-        px: 4,
-        bgcolor: "#EAEFF1",
-        zIndex: 1,
-      }}
-    >
+    <Box component="main" sx={rootSxProps}>
       <Box className={classes.root}>
         <Box>
           <Typography
@@ -45,7 +36,7 @@ export const DashboardPage = () => {
           <Button
             variant="outlined"
             href="/groups"
-            startIcon={<GroupIcon sx={{ width: 34, height: 34 }} />}
+            startIcon={<GroupIcon sx={iconSxProps} />}
             className={classes.button}
           >
             Управление группами
@@ -53,7 +44,7 @@ export const DashboardPage = () => {
           <Button
             variant="outlined"
             href="/email"
-            startIcon={<EmailIcon sx={{ width: 34, height: 34 }} />}
+            startIcon={<EmailIcon sx={iconSxProps} />}
             className={classes.button}
           >
             Сделать рассылку
@@ -62,7 +53,7 @@ export const DashboardPage = () => {
             variant="outlined"
             color="primary"
             href="/statistics"
-            startIcon={<BarChartIcon sx={{ width: 34, height: 34 }} />}
+            startIcon={<BarChartIcon sx={iconSxProps} />}
             className={classes.button}
           >
             Посмотреть статистику
