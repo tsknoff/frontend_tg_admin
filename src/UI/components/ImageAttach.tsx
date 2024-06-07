@@ -23,7 +23,7 @@ export const ImageAttach: FC<IImageAttachProps> = ({ onFileChange }) => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        if (e.target?.result === null) return;
+        if (!e.target || !e.target.result) return;
 
         setImagePreview(e.target.result as string);
       };
