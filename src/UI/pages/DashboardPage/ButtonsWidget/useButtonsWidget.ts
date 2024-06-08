@@ -54,6 +54,8 @@ export const useButtonsWidget = () => {
   }, [buttons]);
 
   useEffect(() => {
+    if (!items.length) return;
+
     const isOrderChanged = items.every(
       (item, index) => item.id === buttons[index].id,
     );
