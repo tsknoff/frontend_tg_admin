@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import HelpIcon from "@mui/icons-material/Help";
 import TextEditor from "../../components/TextEditor";
 import { FormControl, MenuItem, Select } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { ImageAttach } from "../../components/ImageAttach.tsx";
 
 export const MailFormWidget = () => {
@@ -20,10 +20,6 @@ export const MailFormWidget = () => {
   const handleFileChange = (file: File | null) => {
     console.log(selectedFile);
     setSelectedFile(file);
-  };
-
-  const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
-    console.log(event.target.value);
   };
 
   return (
@@ -65,7 +61,6 @@ export const MailFormWidget = () => {
         <FormControl sx={{ m: 1, minWidth: 120 }}>
           <Select
             value={age}
-            onChange={handleChange}
             displayEmpty
             size={"small"}
             inputProps={{ "aria-label": "Without label" }}
