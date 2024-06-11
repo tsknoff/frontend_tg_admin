@@ -4,6 +4,8 @@ import axios from "axios";
 export interface IMenuButton {
   id: number;
   name: string;
+  message?: string;
+  image?: string | null;
 }
 
 interface ButtonsState {
@@ -60,6 +62,14 @@ export const deleteButton = createAsyncThunk(
   },
 );
 
+export const editButton = createAsyncThunk(
+  "buttons/editButton",
+  async (button: IMenuButton) => {
+    const response = await axios.put(`/api/button/${button.id}`, button);
+    return response.data;
+  },
+);
+
 // Slice это кусок состояния и набор редьюсеров для этого куска состояния
 const buttonsSlice = createSlice({
   name: "buttons",
@@ -98,7 +108,25 @@ const buttonsSlice = createSlice({
             (button) => button.id !== action.payload,
           );
         },
-      );
+      )
+      .addCase(
+        editButton.fulfilled,
+        (state, action: PayloadAction<IMenuButton>) => {
+          state.status = "succeeded";
+          const index = state.buttons.findIndex(
+            (button) => button.id === action.payload.id,
+          );
+          if (index !== -1) {
+            state.buttons[index] = action.payload;
+          }
+        },
+      )
+      .addCase(editButton.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(editButton.rejected, (state) => {
+        state.status = "failed";
+      });
   },
 });
 

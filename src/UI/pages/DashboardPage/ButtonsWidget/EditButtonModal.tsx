@@ -7,6 +7,7 @@ import { ImageAttach } from "../../../components/ImageAttach.tsx";
 import { useForm, Controller } from "react-hook-form";
 import { modalStyle } from "./styles.ts";
 import { useTextEditor } from "../../../components/TextEditor/useTextEditor.ts";
+import Typography from "@mui/material/Typography";
 
 interface IEditButtonModal {
   buttonId: number;
@@ -17,6 +18,12 @@ interface FormData {
   message: string;
   image: File | null;
 }
+
+export const ErrorMessage = ({ message }: { message: string | undefined }) => (
+  <Typography variant={"caption"} style={{ color: "red" }}>
+    {message}
+  </Typography>
+);
 
 export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
   const {
@@ -32,8 +39,12 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
   };
 
   const onSubmit = (data: FormData) => {
-    console.log("Form Data:", data);
-    // Здесь можно добавить логику для отправки данных на сервер
+    const message = clearFromPTags(data.message);
+
+    console.log("result", {
+      ...data,
+      message,
+    });
   };
 
   return (
@@ -46,8 +57,17 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
         name="image"
         control={control}
         defaultValue={null}
+        rules={{
+          validate: {
+            lessThan5MB: (file) =>
+              !file ||
+              file.size <= 5 * 1024 * 1024 || // 5 MB
+              "Размер файла не должен превышать 5MB",
+          },
+        }}
         render={() => <ImageAttach onFileChange={handleFileChange} />}
       />
+      {errors.image && <ErrorMessage message={errors.image.message} />}
       <Controller
         name="buttonText"
         control={control}
@@ -65,7 +85,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
         )}
       />
       {errors.buttonText && (
-        <p style={{ color: "red" }}>{errors.buttonText.message}</p>
+        <ErrorMessage message={errors.buttonText.message} />
       )}
       <Box
         style={{
@@ -76,26 +96,21 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
           name="message"
           control={control}
           defaultValue=""
-          rules={{ required: "Сообщение обязательно для заполнения" }}
+          rules={{
+            required: "Сообщение обязательно для заполнения",
+          }}
           render={({ field }) => (
-            // @todo: БАГ: При первом вводе текста в TextEditor он печатается задом наперед!
             <TextEditor
               loading={false}
               currentValue={field.value}
               placeholder="Сообщение которое будет отправлено, когда пользователь нажмет на кнопку"
               style={{ height: "calc(100% - 50px)" }}
-              onChange={(value) => {
-                if (value == "<p><br></p>") value = "";
-
-                field.onChange(clearFromPTags(value));
-              }}
+              onChange={(value) => field.onChange(value)}
             />
           )}
         />
       </Box>
-      {errors.message && (
-        <p style={{ color: "red" }}>{errors.message.message}</p>
-      )}
+      {errors.message && <ErrorMessage message={errors.message.message} />}
       <Button
         disabled={Object.keys(errors).length > 0}
         variant="contained"

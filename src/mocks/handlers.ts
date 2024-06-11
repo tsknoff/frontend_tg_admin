@@ -33,6 +33,11 @@ export const handlers = [
     return HttpResponse.json({ response: "success" });
   }),
 
+  // Обработчик PUT-запроса на редактирование кнопки
+  http.put("/api/button/:id", () => {
+    return HttpResponse.json({ response: "success" });
+  }),
+
   //===========================================================================
   // Greeting handlers
   //===========================================================================
