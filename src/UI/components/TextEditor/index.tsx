@@ -35,6 +35,7 @@ interface ITextEditorProps {
   placeholder?: string;
   onChange: (value: string) => void;
   style?: CSSProperties;
+  textOnly?: boolean;
 }
 
 const TextEditor: FC<ITextEditorProps> = ({
@@ -43,6 +44,7 @@ const TextEditor: FC<ITextEditorProps> = ({
   placeholder,
   style,
   onChange,
+  textOnly = false,
 }) => {
   if (loading) {
     return (
@@ -63,7 +65,7 @@ const TextEditor: FC<ITextEditorProps> = ({
       placeholder={placeholder}
       value={currentValue}
       onChange={onChange}
-      modules={modules}
+      modules={textOnly ? { toolbar: false } : modules}
       theme="snow"
       style={style}
     />

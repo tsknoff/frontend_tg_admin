@@ -43,6 +43,7 @@ export const GreetingWidget = () => {
       <HeaderComponent />
       <Box className={classes.textEditorWrapper}>
         <TextEditor
+          textOnly={true}
           loading={status === "loading"}
           currentValue={draftMessage}
           style={{ height: "calc(100% - 50px)" }}
