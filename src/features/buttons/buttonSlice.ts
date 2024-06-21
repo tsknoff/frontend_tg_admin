@@ -44,14 +44,17 @@ export const addButton = createAsyncThunk(
 
 export const reorderButtons = createAsyncThunk(
   "buttons/reorderButtons",
-  async (order: number[], { rejectWithValue }) => {
+  async (newOrder: number[], { rejectWithValue }) => {
     try {
       const response = await axios.patch(
         "https://nse-work.ru/test/ssb/api/button.php",
-        order,
+        {
+          order: newOrder,
+        },
+        { headers: { "Content-Type": "application/json" } },
       );
       if (response.data.response === "success") {
-        return order; // Возвращаем исходный порядок кнопок
+        return newOrder; // Возвращаем исходный порядок кнопок
       } else {
         return rejectWithValue("Failed to reorder buttons");
       }

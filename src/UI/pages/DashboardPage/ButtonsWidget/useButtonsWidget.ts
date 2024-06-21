@@ -67,9 +67,9 @@ export const useButtonsWidget = () => {
   };
 
   const handleSaveOrder = () => {
-    const newOrder = items.map((item) => item.id);
+    const newOrder = items.map((item) => Number(item.id));
     dispatch(reorderButtons(newOrder));
-    dispatch(fetchButtons());
+    // dispatch(fetchButtons());
     setOrderChanged(false);
   };
 
