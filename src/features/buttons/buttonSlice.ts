@@ -4,8 +4,9 @@ import axios from "axios";
 export interface IMenuButton {
   id: number;
   name: string;
+  buttonUrl: string;
   message?: string;
-  image?: string | null;
+  image?: File | null;
 }
 
 interface ButtonsState {
@@ -78,10 +79,15 @@ export const deleteButton = createAsyncThunk(
 
 export const editButton = createAsyncThunk(
   "buttons/editButton",
-  async (button: IMenuButton) => {
-    const response = await axios.put(
-      `https://nse-work.ru/test/ssb/api/button.php/${button.id}`,
-      button,
+  async (formData: FormData) => {
+    const response = await axios.post(
+      `https://nse-work.ru/test/ssb/api/actions.php`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
     );
     return response.data;
   },

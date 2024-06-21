@@ -10,10 +10,7 @@ import { useTextEditor } from "../../../components/TextEditor/useTextEditor.ts";
 import Typography from "@mui/material/Typography";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../store.ts";
-import {
-  editButton,
-  IMenuButton,
-} from "../../../../features/buttons/buttonSlice.ts";
+import { editButton } from "../../../../features/buttons/buttonSlice.ts";
 
 interface IEditButtonModal {
   buttonId: number;
@@ -21,6 +18,7 @@ interface IEditButtonModal {
 
 interface FormData {
   buttonText: string;
+  buttonUrl: string;
   message: string;
   image: File | null;
 }
@@ -46,16 +44,16 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
   };
 
   const onSubmit = (data: FormData) => {
-    const message = clearFromPTags(data.message);
+    const formData = new FormData();
+    formData.append("id", String(buttonId));
+    formData.append("button_name", data.buttonText);
+    formData.append("text", clearFromPTags(data.message));
+    formData.append("button_url", data.buttonUrl);
+    if (data.image) {
+      formData.append("image", data.image);
+    }
 
-    const buttonData: IMenuButton = {
-      id: buttonId,
-      name: data.buttonText,
-      message,
-      image: data.image ? URL.createObjectURL(data.image) : null,
-    };
-
-    dispatch(editButton(buttonData)).then((result) => {
+    dispatch(editButton(formData)).then((result) => {
       if (editButton.fulfilled.match(result)) {
         console.log("Button updated successfully");
         // Здесь можно закрыть модальное окно или выполнить другие действия после успешного обновления
@@ -105,6 +103,23 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
       {errors.buttonText && (
         <ErrorMessage message={errors.buttonText.message} />
       )}
+      <Controller
+        name="buttonUrl"
+        control={control}
+        defaultValue=""
+        rules={{ required: "URL кнопки обязателен для заполнения" }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            id="outlined-basic"
+            placeholder="URL кнопки"
+            variant="outlined"
+            style={{ width: "100%" }}
+            error={!!errors.buttonUrl}
+          />
+        )}
+      />
+      {errors.buttonUrl && <ErrorMessage message={errors.buttonUrl.message} />}
       <Box
         style={{
           height: "200px",
