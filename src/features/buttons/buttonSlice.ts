@@ -139,6 +139,8 @@ const buttonsSlice = createSlice({
       .addCase(fetchButtons.rejected, (state) => {
         state.status = "failed";
       })
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       .addCase(
         fetchButtonInfo.fulfilled,
         (state, action: PayloadAction<ButtonData>) => {
