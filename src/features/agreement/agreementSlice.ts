@@ -5,8 +5,12 @@ export const fetchAgreement = createAsyncThunk(
   "agreement/fetchAgreement",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/agreement");
-      return response.data.message;
+      const response = await axios.get(
+        "https://nse-work.ru/test/ssb/api/startMessages.php",
+        { params: { type: "legal" } },
+      );
+
+      return response.data.data.text;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -17,7 +21,10 @@ export const updateAgreement = createAsyncThunk(
   "agreement/updateAgreement",
   async (message: string, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/agreement", { message });
+      const response = await axios.post(
+        "https://nse-work.ru/test/ssb/api/startMessages.php",
+        { type: "legal", text: message },
+      );
       if (response.data.response === "success") {
         await dispatch(fetchAgreement());
 

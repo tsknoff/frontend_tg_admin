@@ -122,7 +122,7 @@ const buttonsSlice = createSlice({
         deleteButton.fulfilled,
         (state, action: PayloadAction<number>) => {
           state.buttons = state.buttons.filter(
-            (button) => button.id !== action.payload,
+            (button) => Number(button.id) !== action.payload,
           );
         },
       )

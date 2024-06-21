@@ -6,8 +6,12 @@ export const fetchGreeting = createAsyncThunk(
   "greeting/fetchGreeting",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/greeting");
-      return response.data.message;
+      const response = await axios.get(
+        "https://nse-work.ru/test/ssb/api/startMessages.php",
+        { params: { type: "start" } },
+      );
+
+      return response.data.data.text;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -18,7 +22,10 @@ export const updateGreeting = createAsyncThunk(
   "greeting/updateGreeting",
   async (message: string, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/greeting", { message });
+      const response = await axios.post(
+        "https://nse-work.ru/test/ssb/api/startMessages.php",
+        { type: "start", text: message },
+      );
       if (response.data.response === "success") {
         await dispatch(fetchGreeting());
 
@@ -67,9 +74,13 @@ const greetingSlice = createSlice({
       .addCase(updateGreeting.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateGreeting.fulfilled, (state) => {
-        state.status = "succeeded";
-      })
+      .addCase(
+        updateGreeting.fulfilled,
+        (state, action: PayloadAction<string>) => {
+          state.status = "succeeded";
+          state.message = action.payload;
+        },
+      )
       .addCase(updateGreeting.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
