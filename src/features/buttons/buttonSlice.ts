@@ -18,11 +18,13 @@ const initialState: ButtonsState = {
   status: "idle",
 };
 
-// Thunks for async actions это
+// Обновленные Thunks для асинхронных действий
 export const fetchButtons = createAsyncThunk(
   "buttons/fetchButtons",
   async () => {
-    const response = await axios.get<IMenuButton[]>("/api/button");
+    const response = await axios.get<IMenuButton[]>(
+      "https://nse-work.ru/test/ssb/api/button.php",
+    );
 
     return response.data;
   },
@@ -31,7 +33,10 @@ export const fetchButtons = createAsyncThunk(
 export const addButton = createAsyncThunk(
   "buttons/addButton",
   async (name: string) => {
-    const response = await axios.post("/api/button", { name });
+    const response = await axios.post(
+      "https://nse-work.ru/test/ssb/api/button.php",
+      { name },
+    );
 
     return response.data;
   },
@@ -41,7 +46,10 @@ export const reorderButtons = createAsyncThunk(
   "buttons/reorderButtons",
   async (order: number[], { rejectWithValue }) => {
     try {
-      const response = await axios.patch("/api/button", order);
+      const response = await axios.patch(
+        "https://nse-work.ru/test/ssb/api/button.php",
+        order,
+      );
       if (response.data.response === "success") {
         return order; // Возвращаем исходный порядок кнопок
       } else {
@@ -56,7 +64,10 @@ export const reorderButtons = createAsyncThunk(
 export const deleteButton = createAsyncThunk(
   "buttons/deleteButton",
   async (id: number) => {
-    const response = await axios.delete("/api/button", { data: { id } });
+    const response = await axios.delete(
+      "https://nse-work.ru/test/ssb/api/button.php",
+      { data: { id } },
+    );
 
     return response.data;
   },
@@ -65,7 +76,10 @@ export const deleteButton = createAsyncThunk(
 export const editButton = createAsyncThunk(
   "buttons/editButton",
   async (button: IMenuButton) => {
-    const response = await axios.put(`/api/button/${button.id}`, button);
+    const response = await axios.put(
+      `https://nse-work.ru/test/ssb/api/button.php/${button.id}`,
+      button,
+    );
     return response.data;
   },
 );

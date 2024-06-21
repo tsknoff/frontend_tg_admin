@@ -8,6 +8,12 @@ import { useForm, Controller } from "react-hook-form";
 import { modalStyle } from "./styles.ts";
 import { useTextEditor } from "../../../components/TextEditor/useTextEditor.ts";
 import Typography from "@mui/material/Typography";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../store.ts";
+import {
+  editButton,
+  IMenuButton,
+} from "../../../../features/buttons/buttonSlice.ts";
 
 interface IEditButtonModal {
   buttonId: number;
@@ -26,6 +32,7 @@ export const ErrorMessage = ({ message }: { message: string | undefined }) => (
 );
 
 export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const {
     control,
     handleSubmit,
@@ -41,9 +48,20 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
   const onSubmit = (data: FormData) => {
     const message = clearFromPTags(data.message);
 
-    console.log("result", {
-      ...data,
+    const buttonData: IMenuButton = {
+      id: buttonId,
+      name: data.buttonText,
       message,
+      image: data.image ? URL.createObjectURL(data.image) : null,
+    };
+
+    dispatch(editButton(buttonData)).then((result) => {
+      if (editButton.fulfilled.match(result)) {
+        console.log("Button updated successfully");
+        // Здесь можно закрыть модальное окно или выполнить другие действия после успешного обновления
+      } else {
+        console.log("Failed to update button");
+      }
     });
   };
 

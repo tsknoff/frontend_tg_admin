@@ -84,14 +84,14 @@ export const SideMenu = (props: DrawerProps) => {
         >
           <Button
             variant="contained"
-            href={"https://t.me/spasibo_bot"}
+            href={"https://t.me/ssb_admin_test_bot"}
             target={"_blank"}
             endIcon={<TelegramIcon />}
             style={{
               color: "#fff",
             }}
           >
-            @spasibo_bot
+            Телеграм бот
           </Button>
         </ListItem>
         {categories.map(({ id, children }) => (
