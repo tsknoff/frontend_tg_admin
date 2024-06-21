@@ -9,15 +9,34 @@ export interface IMenuButton {
   image?: File | null;
 }
 
+interface ButtonData {
+  id: number;
+  button_name: string;
+  button_url: string;
+  text: string;
+  image: string | null;
+}
+
 interface ButtonsState {
   buttons: IMenuButton[];
+  buttonInfo: ButtonData | null;
   status: "idle" | "loading" | "succeeded" | "failed";
 }
 
 const initialState: ButtonsState = {
   buttons: [],
+  buttonInfo: null,
   status: "idle",
 };
+
+export interface ButtonInfo {
+  buttonName: string;
+  buttonUrl: string;
+  fileUrl: string;
+  id: string;
+  name: string;
+  text: string;
+}
 
 // Обновленные Thunks для асинхронных действий
 export const fetchButtons = createAsyncThunk(
@@ -26,7 +45,17 @@ export const fetchButtons = createAsyncThunk(
     const response = await axios.get<IMenuButton[]>(
       "https://nse-work.ru/test/ssb/api/button.php",
     );
+    return response.data;
+  },
+);
 
+export const fetchButtonInfo = createAsyncThunk(
+  "buttons/fetchButtonInfo",
+  async (id: number) => {
+    const response = await axios.get<ButtonInfo>(
+      "https://nse-work.ru/test/ssb/api/actions.php",
+      { params: { id } },
+    );
     return response.data;
   },
 );
@@ -38,7 +67,6 @@ export const addButton = createAsyncThunk(
       "https://nse-work.ru/test/ssb/api/button.php",
       { name },
     );
-
     return response.data;
   },
 );
@@ -72,7 +100,6 @@ export const deleteButton = createAsyncThunk(
       "https://nse-work.ru/test/ssb/api/button.php",
       { data: { id } },
     );
-
     return response.data;
   },
 );
@@ -93,7 +120,6 @@ export const editButton = createAsyncThunk(
   },
 );
 
-// Slice это кусок состояния и набор редьюсеров для этого куска состояния
 const buttonsSlice = createSlice({
   name: "buttons",
   initialState,
@@ -113,6 +139,12 @@ const buttonsSlice = createSlice({
       .addCase(fetchButtons.rejected, (state) => {
         state.status = "failed";
       })
+      .addCase(
+        fetchButtonInfo.fulfilled,
+        (state, action: PayloadAction<ButtonData>) => {
+          state.buttonInfo = action.payload;
+        },
+      )
       .addCase(addButton.fulfilled, (state) => {
         state.status = "succeeded";
       })

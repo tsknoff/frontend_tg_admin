@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import TextEditor from "../../../components/TextEditor";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
@@ -8,9 +8,12 @@ import { useForm, Controller } from "react-hook-form";
 import { modalStyle } from "./styles.ts";
 import { useTextEditor } from "../../../components/TextEditor/useTextEditor.ts";
 import Typography from "@mui/material/Typography";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../store.ts";
-import { editButton } from "../../../../features/buttons/buttonSlice.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../store.ts";
+import {
+  editButton,
+  fetchButtonInfo,
+} from "../../../../features/buttons/buttonSlice.ts";
 
 interface IEditButtonModal {
   buttonId: number;
@@ -35,9 +38,35 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FormData>();
   const { clearFromPTags } = useTextEditor("");
+  const { buttonInfo } = useSelector((state: RootState) => state.buttons);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchButtonData = async () => {
+      const result = await dispatch(fetchButtonInfo(Number(buttonId)));
+      if (fetchButtonInfo.fulfilled.match(result)) {
+        setLoading(false);
+      }
+    };
+
+    fetchButtonData();
+  }, [buttonId, dispatch]);
+
+  useEffect(() => {
+    if (buttonInfo) {
+      reset({
+        buttonText: buttonInfo.name || "",
+        buttonUrl: buttonInfo.buttonUrl || "",
+        message: buttonInfo.text || "",
+        image: buttonInfo.fileUrl ? new File([], buttonInfo.fileUrl) : null,
+      });
+      console.log("Button info fetched", buttonInfo);
+    }
+  }, [buttonInfo, reset]);
 
   const handleFileChange = (file: File | null) => {
     setValue("image", file);
@@ -56,12 +85,15 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
     dispatch(editButton(formData)).then((result) => {
       if (editButton.fulfilled.match(result)) {
         console.log("Button updated successfully");
-        // Здесь можно закрыть модальное окно или выполнить другие действия после успешного обновления
       } else {
         console.log("Failed to update button");
       }
     });
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Box
@@ -72,7 +104,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
       <Controller
         name="image"
         control={control}
-        defaultValue={null}
+        defaultValue={buttonInfo?.fileUrl || null}
         rules={{
           validate: {
             lessThan5MB: (file) =>
@@ -81,13 +113,19 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
               "Размер файла не должен превышать 5MB",
           },
         }}
-        render={() => <ImageAttach onFileChange={handleFileChange} />}
+        render={() => (
+          <ImageAttach
+            // image={buttonInfo?.fileUrl || null}
+            imageSrc={buttonInfo?.fileUrl || ""}
+            onFileChange={handleFileChange}
+          />
+        )}
       />
       {errors.image && <ErrorMessage message={errors.image.message} />}
       <Controller
         name="buttonText"
         control={control}
-        defaultValue=""
+        defaultValue={buttonInfo?.buttonName || ""}
         rules={{ required: "Текст кнопки обязателен для заполнения" }}
         render={({ field }) => (
           <TextField
@@ -106,7 +144,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
       <Controller
         name="buttonUrl"
         control={control}
-        defaultValue=""
+        defaultValue={buttonInfo?.buttonUrl || ""}
         rules={{ required: "URL кнопки обязателен для заполнения" }}
         render={({ field }) => (
           <TextField
@@ -128,7 +166,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
         <Controller
           name="message"
           control={control}
-          defaultValue=""
+          defaultValue={buttonInfo?.text || ""}
           rules={{
             required: "Сообщение обязательно для заполнения",
           }}

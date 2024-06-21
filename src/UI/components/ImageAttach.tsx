@@ -7,12 +7,16 @@ import ClearIcon from "@mui/icons-material/Clear";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 interface IImageAttachProps {
+  imageSrc?: string | null;
   onFileChange: (file: File | null) => void;
 }
 
-export const ImageAttach: FC<IImageAttachProps> = ({ onFileChange }) => {
+export const ImageAttach: FC<IImageAttachProps> = ({
+  imageSrc,
+  onFileChange,
+}) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imagePreview, setImagePreview] = useState<string>(imageSrc ?? "");
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
