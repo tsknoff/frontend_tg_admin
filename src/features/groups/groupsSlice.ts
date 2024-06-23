@@ -110,7 +110,7 @@ const groupsSlice = createSlice({
       )
       .addCase(fetchGroups.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.error.message ?? null;
       })
       .addCase(addGroup.fulfilled, (state, action: PayloadAction<Group[]>) => {
         state.groups = action.payload;
