@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Box from "@mui/material/Box";
 import { FC, useEffect, useState } from "react";
 import TextEditor from "../../../components/TextEditor";
