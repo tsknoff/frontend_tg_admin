@@ -8,6 +8,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { FC } from "react";
+import { StatData } from "../../../features/stats/statSlice.ts";
 
 ChartJS.register(
   CategoryScale,
@@ -44,6 +46,10 @@ const options = {
   },
 };
 
-export const BarChart = () => {
+interface BarChartProps {
+  data: StatData;
+}
+
+export const BarChart: FC<BarChartProps> = ({ data }) => {
   return <Bar data={data} options={options} />;
 };
