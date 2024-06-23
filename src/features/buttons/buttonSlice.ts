@@ -11,10 +11,10 @@ export interface IMenuButton {
 
 interface ButtonData {
   id: number;
-  button_name: string;
-  button_url: string;
+  buttonName: string;
+  buttonUrl: string;
   text: string;
-  image: string | null;
+  fileUrl: string | null;
 }
 
 interface ButtonsState {

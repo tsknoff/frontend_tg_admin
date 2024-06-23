@@ -1,4 +1,3 @@
-//@ts-nocheck
 import Box from "@mui/material/Box";
 import { FC, useEffect, useState } from "react";
 import TextEditor from "../../../components/TextEditor";
@@ -68,7 +67,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
         message: buttonInfo.text || "",
         image: buttonInfo.fileUrl ? new File([], buttonInfo.fileUrl) : null,
       });
-      console.log("Button info fetched", buttonInfo);
+      // console.log("Button info fetched", buttonInfo);
     }
   }, [buttonInfo, reset]);
 
@@ -76,7 +75,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
     setValue("image", file);
   };
 
-  const validateButtonFields = (value, allValues) => {
+  const validateButtonFields = (value: string, allValues: FormData) => {
     const { buttonText, buttonUrl } = allValues;
     if (value && !buttonUrl) {
       return "URL кнопки обязателен для заполнения, если указано название кнопки";
@@ -93,7 +92,9 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
     formData.append("button_name", data.buttonText);
     formData.append("text", clearFromPTags(data.message));
     formData.append("button_url", data.buttonUrl);
-    if (data.image) {
+    if (buttonInfo?.fileUrl) {
+      formData.append("file_url", buttonInfo.fileUrl);
+    } else if (data.image) {
       formData.append("image", data.image);
     }
 
@@ -198,7 +199,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
           <Controller
             name="image"
             control={control}
-            defaultValue={buttonInfo?.fileUrl || null}
+            defaultValue={buttonInfo?.fileUrl ? new File([], "") : null}
             rules={{
               validate: {
                 lessThan5MB: (file) =>
