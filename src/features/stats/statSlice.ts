@@ -14,12 +14,14 @@ export interface StatData {
 
 interface StatState {
   data: StatData | null;
+  usersData: StatData | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: StatState = {
   data: null,
+  usersData: null,
   status: "idle",
   error: null,
 };
@@ -30,6 +32,21 @@ export const fetchStatData = createAsyncThunk(
     try {
       const response = await axios.get(
         "https://nse-work.ru/test/ssb/api/stat.php",
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const fetchUsersStatData = createAsyncThunk(
+  "stat/fetchUsersStatData",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        "https://nse-work.ru/test/ssb/api/stat.php",
+        { params: { type: "users" } },
       );
       return response.data;
     } catch (error: any) {
@@ -55,6 +72,20 @@ const statSlice = createSlice({
         },
       )
       .addCase(fetchStatData.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(fetchUsersStatData.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        fetchUsersStatData.fulfilled,
+        (state, action: PayloadAction<StatData>) => {
+          state.status = "succeeded";
+          state.usersData = action.payload;
+        },
+      )
+      .addCase(fetchUsersStatData.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });
