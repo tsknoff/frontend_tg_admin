@@ -21,12 +21,14 @@ interface ButtonsState {
   buttons: IMenuButton[];
   buttonInfo: ButtonData | null;
   status: "idle" | "loading" | "succeeded" | "failed";
+  saveStatus: "idle" | "saving" | "succeeded" | "failed";
 }
 
 const initialState: ButtonsState = {
   buttons: [],
   buttonInfo: null,
   status: "idle",
+  saveStatus: "idle",
 };
 
 export interface ButtonInfo {
@@ -166,10 +168,13 @@ const buttonsSlice = createSlice({
           );
         },
       )
+      .addCase(editButton.pending, (state) => {
+        state.saveStatus = "saving";
+      })
       .addCase(
         editButton.fulfilled,
         (state, action: PayloadAction<IMenuButton>) => {
-          state.status = "succeeded";
+          state.saveStatus = "succeeded";
           const index = state.buttons.findIndex(
             (button) => button.id === action.payload.id,
           );
@@ -178,9 +183,6 @@ const buttonsSlice = createSlice({
           }
         },
       )
-      .addCase(editButton.pending, (state) => {
-        state.status = "loading";
-      })
       .addCase(editButton.rejected, (state) => {
         state.status = "failed";
       });

@@ -1,9 +1,7 @@
-//@ts-nocheck
 import Box from "@mui/material/Box";
 import { FC, useEffect, useState } from "react";
 import TextEditor from "../../../components/TextEditor";
-import Button from "@mui/material/Button";
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { ImageAttach } from "../../../components/ImageAttach.tsx";
 import { useForm, Controller } from "react-hook-form";
 import { modalStyle } from "./styles.ts";
@@ -15,6 +13,7 @@ import {
   editButton,
   fetchButtonInfo,
 } from "../../../../features/buttons/buttonSlice.ts";
+import Button from "@mui/material/Button";
 
 interface IEditButtonModal {
   buttonId: number;
@@ -40,10 +39,13 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
     handleSubmit,
     setValue,
     reset,
-    formState: { errors },
-  } = useForm<FormData>();
+    getValues,
+    formState: { errors, isValid },
+  } = useForm<FormData>({ mode: "onChange" });
   const { clearFromPTags } = useTextEditor("");
-  const { buttonInfo } = useSelector((state: RootState) => state.buttons);
+  const { buttonInfo, saveStatus } = useSelector(
+    (state: RootState) => state.buttons,
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
   useEffect(() => {
     if (buttonInfo) {
       reset({
-        buttonText: buttonInfo.name || "",
+        buttonText: buttonInfo.buttonName || "",
         buttonUrl: buttonInfo.buttonUrl || "",
         message: buttonInfo.text || "",
         image: buttonInfo.fileUrl ? new File([], buttonInfo.fileUrl) : null,
@@ -71,6 +73,17 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
 
   const handleFileChange = (file: File | null) => {
     setValue("image", file);
+  };
+
+  const validateButtonFields = (value, allValues) => {
+    const { buttonText, buttonUrl } = allValues;
+    if (value && !buttonUrl) {
+      return "URL кнопки обязателен для заполнения, если указано название кнопки";
+    }
+    if (buttonUrl && !buttonText) {
+      return "Название кнопки обязательно для заполнения, если указан URL кнопки";
+    }
+    return true;
   };
 
   const onSubmit = (data: FormData) => {
@@ -92,9 +105,12 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
     });
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    if (!errors.buttonText && !errors.buttonUrl) {
+      setValue("buttonText", getValues("buttonText"));
+      setValue("buttonUrl", getValues("buttonUrl"));
+    }
+  }, [errors.buttonText, errors.buttonUrl, setValue, getValues]);
 
   return (
     <Box
@@ -102,108 +118,129 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
       component="form"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Controller
-        name="image"
-        control={control}
-        defaultValue={buttonInfo?.fileUrl || null}
-        rules={{
-          validate: {
-            lessThan5MB: (file) =>
-              !file ||
-              file.size <= 5 * 1024 * 1024 || // 5 MB
-              "Размер файла не должен превышать 5MB",
-          },
-        }}
-        render={() => (
-          <ImageAttach
-            // image={buttonInfo?.fileUrl || null}
-            imageSrc={buttonInfo?.fileUrl || ""}
-            onFileChange={handleFileChange}
-          />
-        )}
-      />
-      {errors.image && <ErrorMessage message={errors.image.message} />}
-      <Controller
-        name="buttonText"
-        control={control}
-        defaultValue={buttonInfo?.buttonName || ""}
-        rules={{ required: "Текст кнопки обязателен для заполнения" }}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="outlined-basic"
-            placeholder="Текст кнопки"
-            variant="outlined"
-            style={{ width: "100%" }}
-            error={!!errors.buttonText}
-          />
-        )}
-      />
-      {errors.buttonText && (
-        <ErrorMessage message={errors.buttonText.message} />
-      )}
-      <Controller
-        name="buttonUrl"
-        control={control}
-        defaultValue={buttonInfo?.buttonUrl || ""}
-        rules={{ required: "URL кнопки обязателен для заполнения" }}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            id="outlined-basic"
-            placeholder="URL кнопки"
-            variant="outlined"
-            style={{ width: "100%" }}
-            error={!!errors.buttonUrl}
-          />
-        )}
-      />
-      {errors.buttonUrl && <ErrorMessage message={errors.buttonUrl.message} />}
-      <Box
-        style={{
-          height: "200px",
-        }}
-      >
-        <Controller
-          name="message"
-          control={control}
-          defaultValue={buttonInfo?.text || ""}
-          rules={{
-            required: "Сообщение обязательно для заполнения",
+      {loading ? (
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          render={({ field }) => (
-            <TextEditor
-              loading={false}
-              currentValue={field.value}
-              placeholder="Сообщение которое будет отправлено, когда пользователь нажмет на кнопку"
-              style={{ height: "calc(100% - 50px)" }}
-              onChange={(value) => field.onChange(value)}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <Typography variant="h6">Редактирование кнопки</Typography>
+          <Box
+            style={{
+              height: "200px",
+            }}
+          >
+            <Controller
+              name="message"
+              control={control}
+              defaultValue={buttonInfo?.text || ""}
+              rules={{
+                required: "Сообщение обязательно для заполнения",
+              }}
+              render={({ field }) => (
+                <TextEditor
+                  loading={false}
+                  currentValue={field.value}
+                  placeholder="Сообщение которое будет отправлено, когда пользователь нажмет на кнопку"
+                  style={{ height: "calc(100% - 50px)" }}
+                  onChange={(value) => field.onChange(value)}
+                />
+              )}
             />
+          </Box>
+          {errors.message && <ErrorMessage message={errors.message.message} />}
+          <Controller
+            name="buttonText"
+            control={control}
+            defaultValue={buttonInfo?.buttonName || ""}
+            rules={{
+              validate: (value) => validateButtonFields(value, getValues()),
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                id="outlined-basic"
+                placeholder="Текст кнопки"
+                variant="outlined"
+                style={{ width: "100%" }}
+                error={!!errors.buttonText}
+              />
+            )}
+          />
+          <Controller
+            name="buttonUrl"
+            control={control}
+            defaultValue={buttonInfo?.buttonUrl || ""}
+            rules={{
+              validate: (value) => validateButtonFields(value, getValues()),
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                id="outlined-basic"
+                placeholder="URL кнопки"
+                variant="outlined"
+                style={{ width: "100%" }}
+                error={!!errors.buttonUrl}
+              />
+            )}
+          />
+          {(errors.buttonText || errors.buttonUrl) && (
+            <ErrorMessage message="Заполните оба поля или оба оставьте пустыми" />
           )}
-        />
-      </Box>
-      {errors.message && <ErrorMessage message={errors.message.message} />}
-      <Button
-        disabled={Object.keys(errors).length > 0}
-        variant="contained"
-        color="primary"
-        type="submit"
-      >
-        Сохранить
-      </Button>
-      <p
-        style={{
-          position: "absolute",
-          bottom: "5px",
-          right: "16px",
-          margin: "0",
-          padding: "0",
-          fontSize: "10px",
-          opacity: "0.5",
-        }}
-      >
-        id: {buttonId}
-      </p>
+          <Controller
+            name="image"
+            control={control}
+            defaultValue={buttonInfo?.fileUrl || null}
+            rules={{
+              validate: {
+                lessThan5MB: (file) =>
+                  !file ||
+                  file.size <= 5 * 1024 * 1024 || // 5 MB
+                  "Размер файла не должен превышать 5MB",
+              },
+            }}
+            render={() => (
+              <ImageAttach
+                imageSrc={buttonInfo?.fileUrl || ""}
+                onFileChange={handleFileChange}
+              />
+            )}
+          />
+          {errors.image && <ErrorMessage message={errors.image.message} />}
+          <Button
+            disabled={!isValid || saveStatus === "saving"}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            {saveStatus === "saving" ? (
+              <CircularProgress size={24} />
+            ) : (
+              "Сохранить"
+            )}
+          </Button>
+          <p
+            style={{
+              position: "absolute",
+              bottom: "5px",
+              right: "16px",
+              margin: "0",
+              padding: "0",
+              fontSize: "10px",
+              opacity: "0.5",
+            }}
+          >
+            id: {buttonId}
+          </p>
+        </>
+      )}
     </Box>
   );
 };
