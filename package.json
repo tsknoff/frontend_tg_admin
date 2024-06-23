@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
     "@reduxjs/toolkit": "^2.2.5",
+    "@telegram-auth/react": "^1.0.3",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "draft-js": "^0.11.7",
