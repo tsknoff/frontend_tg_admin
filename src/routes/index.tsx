@@ -5,10 +5,11 @@ import { MailsPage } from "../UI/pages/MailsPage";
 import { StatChartPage } from "../UI/pages/StatChartPage";
 import { GroupsPage } from "../UI/pages/GroupsPage/GroupsPage.tsx";
 import { LoginPage } from "../UI/pages/LoginPage";
+import ProtectedRoute from "../UI/pages/ProtectedRoute.tsx";
 
 export const routes = [
   {
-    path: "/login", // Добавьте маршрут для страницы авторизации
+    path: "/login",
     element: <LoginPage />,
   },
   {
@@ -18,20 +19,26 @@ export const routes = [
     children: [
       {
         path: "/",
-        index: true,
-        element: <DashboardPage />,
-      },
-      {
-        path: "/email",
-        element: <MailsPage />,
-      },
-      {
-        path: "/groups",
-        element: <GroupsPage />,
-      },
-      {
-        path: "/statistics",
-        element: <StatChartPage />,
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "/",
+            index: true,
+            element: <DashboardPage />,
+          },
+          {
+            path: "/email",
+            element: <MailsPage />,
+          },
+          {
+            path: "/groups",
+            element: <GroupsPage />,
+          },
+          {
+            path: "/statistics",
+            element: <StatChartPage />,
+          },
+        ],
       },
     ],
   },

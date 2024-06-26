@@ -4,10 +4,12 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { FC } from "react";
 import Typography from "@mui/material/Typography";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
+import axios from "axios";
 
 interface HeaderProps {
   onDrawerToggle: () => void;
@@ -15,6 +17,7 @@ interface HeaderProps {
 
 export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   let title;
   switch (location.pathname) {
@@ -33,6 +36,19 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
     default:
       title = "Dashboard";
   }
+
+  // get username from localStorage
+  const userName = localStorage.getItem("username");
+
+  const handleLogout = async () => {
+    try {
+      await axios.get("https://nse-work.ru/test/ssb/api/login.php?logout");
+      localStorage.removeItem("username"); // Удаление информации о пользователе из localStorage
+      navigate("/login");
+    } catch (error) {
+      console.error("An error occurred during logout", error);
+    }
+  };
 
   return (
     <AppBar
@@ -90,11 +106,12 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
                 backgroundColor: "whitesmoke",
               }}
             >
+              <Avatar src="/static/images/avatar/1.jpg" alt={userName} />
               <Typography variant="body1" color="textPrimary">
-                Name Surname
+                {userName}
               </Typography>
-              <IconButton color="inherit" sx={{ p: 0.5 }}>
-                <Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
+              <IconButton color="inherit" onClick={handleLogout}>
+                <LogoutIcon />
               </IconButton>
             </Paper>
           </Grid>

@@ -36,11 +36,9 @@ export const LoginPage: React.FC = () => {
       if (response.data.status === "success") {
         // Здесь вы можете перенаправить пользователя на другую страницу или выполнить другие действия после успешного входа
         // alert("Вход выполнен успешно!");
+        // Положить в localStorage username и token
+        localStorage.setItem("username", response.data.data.name);
         navigate("/");
-        // Кладем в localStorage токен, чтобы сохранить авторизацию
-        localStorage.setItem("ssb_user", JSON.stringify(response.data.data));
-        // Сделаем куку, чтобы сохранить авторизацию
-        document.cookie = `ssb_user=${JSON.stringify(response.data.data)}`;
       } else {
         setError("Неверное имя пользователя или пароль");
       }
