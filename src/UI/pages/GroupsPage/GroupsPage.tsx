@@ -151,6 +151,7 @@ export const GroupsPage = () => {
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
   const [isGroupUpdated, setIsGroupUpdated] = useState(false); // New state to track group updates
+  const [disableSave, setDisableSave] = useState(false);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -208,6 +209,9 @@ export const GroupsPage = () => {
 
   const handleOpenUsersDialog = (group) => {
     setSelectedGroup(group);
+    console.log("author", group.author);
+    console.log("disableSave", Number(group.author) === 0);
+    setDisableSave(Number(group.author) === 0);
     setOpenUsersDialog(true);
   };
 
@@ -504,6 +508,7 @@ export const GroupsPage = () => {
             variant={"contained"}
             onClick={handleUpdateUsers}
             color="primary"
+            disabled={disableSave}
           >
             Сохранить
           </Button>

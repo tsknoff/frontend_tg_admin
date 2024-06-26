@@ -28,12 +28,12 @@ const categories = [
   {
     id: "2",
     children: [
-      {
-        id: "Рассылки",
-        icon: <Email />,
-        url: "email",
-        active: false,
-      },
+      // {
+      //   id: "Рассылки",
+      //   icon: <Email />,
+      //   url: "email",
+      //   active: false,
+      // },
       {
         id: "Группы",
         icon: <Group />,

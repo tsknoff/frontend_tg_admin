@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../../store.ts";
 
 export const useAgreementState = () => {
-  const message = useSelector((state: RootState) => state.agreement.message);
-  const status = useSelector((state: RootState) => state.agreement.status);
+  const { message, status } = useSelector(
+    (state: RootState) => state.agreement,
+  );
 
   return { message, status };
 };
@@ -19,8 +20,9 @@ export const useAgreementActions = () => {
     dispatch(fetchAgreement());
   };
 
-  const updateAgreementData = (message: string) => {
-    dispatch(updateAgreement(message));
+  const updateAgreementData = async (message: string) => {
+    await dispatch(updateAgreement(message));
+    fetchAgreementData();
   };
 
   return { fetchAgreementData, updateAgreementData };

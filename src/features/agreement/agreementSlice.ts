@@ -10,6 +10,7 @@ export const fetchAgreement = createAsyncThunk(
         { params: { type: "legal" } },
       );
 
+      console.log(response.data.data.text);
       return response.data.data.text;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -19,16 +20,17 @@ export const fetchAgreement = createAsyncThunk(
 
 export const updateAgreement = createAsyncThunk(
   "agreement/updateAgreement",
-  async (message: string, { dispatch, rejectWithValue }) => {
+  async (message: string, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         "https://nse-work.ru/test/ssb/api/startMessages.php",
-        { type: "legal", text: message },
+        {
+          type: "legal",
+          text: message,
+        },
       );
       if (response.data.response === "success") {
-        await dispatch(fetchAgreement());
-
-        return message;
+        return response.data.data.text;
       } else {
         return rejectWithValue("Failed to update agreement");
       }
@@ -73,8 +75,9 @@ const agreementSlice = createSlice({
       .addCase(updateAgreement.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateAgreement.fulfilled, (state) => {
+      .addCase(updateAgreement.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.message = action.payload;
       })
       .addCase(updateAgreement.rejected, (state, action) => {
         state.status = "failed";

@@ -1,10 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { CSSProperties, FC } from "react";
+import { CSSProperties, FC, useEffect } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
+import { use } from "msw/lib/core/utils/internal/requestHandlerUtils";
 
 // Изменение тегов по умолчанию для bold и italic
 const Bold = Quill.import("formats/bold") as any;

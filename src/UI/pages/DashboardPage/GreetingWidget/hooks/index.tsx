@@ -19,8 +19,9 @@ export const useGreetingActions = () => {
     dispatch(fetchGreeting());
   };
 
-  const updateGreetingData = (message: string) => {
-    dispatch(updateGreeting(message));
+  const updateGreetingData = async (message: string) => {
+    await dispatch(updateGreeting(message));
+    fetchGreetingData();
   };
 
   return { fetchGreetingData, updateGreetingData };

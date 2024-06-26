@@ -61,9 +61,9 @@ export const AgreementWidget = () => {
           >
             <Grid item>
               <Button
-                onClick={() =>
-                  updateAgreementData(clearFromPTags(draftMessage))
-                }
+                onClick={() => {
+                  updateAgreementData(clearFromPTags(draftMessage));
+                }}
                 variant="contained"
                 sx={{ mr: 2 }}
                 disabled={
