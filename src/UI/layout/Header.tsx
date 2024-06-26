@@ -106,7 +106,7 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
                 backgroundColor: "whitesmoke",
               }}
             >
-              <Avatar src="/static/images/avatar/1.jpg" alt={userName} />
+              <Avatar src="/static/images/avatar/1.jpg" alt={userName || ""} />
               <Typography variant="body1" color="textPrimary">
                 {userName}
               </Typography>
