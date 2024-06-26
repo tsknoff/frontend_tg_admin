@@ -31,6 +31,10 @@ import * as XLSX from "xlsx";
 import Typography from "@mui/material/Typography";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Toolbar from "@mui/material/Toolbar";
+import AppBar from "@mui/material/AppBar";
+import AddIcon from "@mui/icons-material/Add";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 const not = (a, b) => {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -95,7 +99,9 @@ const TransferList = ({
   return (
     <Grid container spacing={2} justifyContent="center" alignItems="center">
       <Grid item xs={12} sm={5}>
-        <Typography variant="h6">In Group</Typography>
+        <Typography variant="h6">
+          {left.length > 0 ? "В группе" : "Нет пользователей"}
+        </Typography>
         {customList("Choices", left)}
       </Grid>
       <Grid item>
@@ -123,7 +129,9 @@ const TransferList = ({
         </Grid>
       </Grid>
       <Grid item xs={12} sm={5}>
-        <Typography variant="h6">All users</Typography>
+        <Typography variant="h6">
+          {right.length > 0 ? "Доступные пользователи" : "Нет пользователей"}
+        </Typography>
         {customList("Chosen", right)}
       </Grid>
     </Grid>
@@ -284,11 +292,18 @@ export const GroupsPage = () => {
     <Box
       style={{
         width: "100%",
-        padding: "10px",
+        height: "100%",
+        padding: "32px",
+        backgroundColor: "#EAEFF1",
       }}
     >
-      <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-        Add Group
+      <Button
+        endIcon={<AddIcon />}
+        variant="contained"
+        color="primary"
+        onClick={() => handleOpen()}
+      >
+        Добавить группу
       </Button>
 
       {status === "loading" || groupUsersLoading === "loading" ? (
@@ -305,65 +320,91 @@ export const GroupsPage = () => {
       ) : (
         <Box
           style={{
-            marginTop: "10px",
+            marginTop: "32px",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             flexWrap: "wrap",
-            gap: "10px",
+            gap: "16px",
             width: "100%",
           }}
         >
           {groups.map((group) => (
-            <Box
+            <Paper
               key={group.id}
               style={{
-                border: "2px solid #F8F8F8",
                 borderRadius: "5px",
                 backgroundColor: "#fff",
-                padding: "10px",
                 width: "fit-content",
               }}
             >
-              <h3>{group.name}</h3>
-              <Box
+              <h3
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "10px",
-                  height: "50px",
+                  paddingLeft: "10px",
                 }}
               >
-                <Button
-                  endIcon={<EditIcon />}
-                  variant={"contained"}
-                  onClick={() => handleOpenUsersDialog(group)}
-                  style={{
-                    textWrap: "nowrap",
-                  }}
-                >
-                  Manage Users
-                </Button>
-                <Button
-                  endIcon={<EditIcon />}
-                  onClick={() => handleOpen(group)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  endIcon={<DeleteIcon />}
-                  onClick={() => handleDelete(group.id)}
-                >
-                  Delete
-                </Button>
-              </Box>
-            </Box>
+                {group.name}
+              </h3>
+
+              <AppBar
+                position="static"
+                color="default"
+                elevation={0}
+                sx={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
+              >
+                <Toolbar>
+                  <Grid
+                    container
+                    spacing={2}
+                    alignItems="center"
+                    style={{
+                      paddingTop: "10px",
+                      paddingBottom: "10px",
+                    }}
+                  >
+                    <Grid
+                      item
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "10px",
+                      }}
+                    >
+                      <Button
+                        endIcon={<EditIcon />}
+                        variant={"contained"}
+                        onClick={() => handleOpenUsersDialog(group)}
+                        style={{
+                          textWrap: "nowrap",
+                        }}
+                      >
+                        Участники
+                      </Button>
+                      <Button
+                        endIcon={<EditIcon />}
+                        onClick={() => handleOpen(group)}
+                      >
+                        Название
+                      </Button>
+                      <Button
+                        endIcon={<DeleteIcon />}
+                        onClick={() => handleDelete(group.id)}
+                      >
+                        Удалить
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Toolbar>
+              </AppBar>
+            </Paper>
           ))}
         </Box>
       )}
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{selectedGroup ? "Edit Group" : "Add Group"}</DialogTitle>
+        <DialogTitle>
+          {selectedGroup ? "Редактировать группу" : "Добавить группу"}
+        </DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
@@ -396,7 +437,9 @@ export const GroupsPage = () => {
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle>Manage Users</DialogTitle>
+        <DialogTitle>
+          {selectedGroup ? `Участники группы ${selectedGroup.name}` : ""}
+        </DialogTitle>
         <DialogContent
           style={{
             padding: 0,
@@ -416,6 +459,31 @@ export const GroupsPage = () => {
             </Box>
           ) : (
             <>
+              <Box
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Button
+                  endIcon={<FileDownloadIcon />}
+                  variant="contained"
+                  component="label"
+                  style={{
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Загрузить из Excel
+                  <input
+                    type="file"
+                    accept=".xls,.xlsx"
+                    hidden
+                    onChange={handleFileUpload}
+                  />
+                </Button>
+              </Box>
               <TransferList
                 left={left}
                 right={right}
@@ -427,38 +495,17 @@ export const GroupsPage = () => {
                 handleCheckedRight={handleCheckedRight}
                 handleCheckedLeft={handleCheckedLeft}
               />
-              <Box
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  component="label"
-                  style={{
-                    marginTop: "10px",
-                  }}
-                >
-                  Import from excel
-                  <input
-                    type="file"
-                    accept=".xls,.xlsx"
-                    hidden
-                    onChange={handleFileUpload}
-                  />
-                </Button>
-              </Box>
             </>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseUsersDialog} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleUpdateUsers} color="primary">
-            Save
+          <Button onClick={handleCloseUsersDialog}>Отмена</Button>
+          <Button
+            variant={"contained"}
+            onClick={handleUpdateUsers}
+            color="primary"
+          >
+            Сохранить
           </Button>
         </DialogActions>
       </Dialog>

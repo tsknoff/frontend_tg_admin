@@ -7,6 +7,7 @@ import {
   fetchStatData,
   fetchUsersStatData,
 } from "../../../features/stats/statSlice.ts";
+import { CircularProgress } from "@mui/material";
 
 export const StatChartPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,9 +25,12 @@ export const StatChartPage = () => {
       <Box
         style={{
           padding: "20px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        Loading...
+        <CircularProgress />
       </Box>
     );
   }

@@ -4,8 +4,13 @@ import { ErrorPage } from "./ErrorPage.tsx";
 import { MailsPage } from "../UI/pages/MailsPage";
 import { StatChartPage } from "../UI/pages/StatChartPage";
 import { GroupsPage } from "../UI/pages/GroupsPage/GroupsPage.tsx";
+import { LoginPage } from "../UI/pages/LoginPage";
 
 export const routes = [
+  {
+    path: "/login", // Добавьте маршрут для страницы авторизации
+    element: <LoginPage />,
+  },
   {
     path: "/",
     element: <Root />,

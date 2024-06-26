@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import store from "./store.ts";
 import { Provider } from "react-redux";
+import { theme } from "./UI/theme.ts";
+import { ThemeProvider } from "@mui/material/styles";
 
 if (process.env.NODE_ENV === "development") {
   const { worker } = await import("./mocks/browser");
@@ -13,7 +15,9 @@ if (process.env.NODE_ENV === "development") {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>,
 );
