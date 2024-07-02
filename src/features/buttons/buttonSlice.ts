@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { apiClient } from "../apiClient.ts";
 
 export interface IMenuButton {
   id: number;
@@ -44,9 +44,7 @@ export interface ButtonInfo {
 export const fetchButtons = createAsyncThunk(
   "buttons/fetchButtons",
   async () => {
-    const response = await axios.get<IMenuButton[]>(
-      "https://nse-work.ru/test/ssb/api/button.php",
-    );
+    const response = await apiClient.get<IMenuButton[]>("/button.php");
     return response.data;
   },
 );
@@ -54,10 +52,9 @@ export const fetchButtons = createAsyncThunk(
 export const fetchButtonInfo = createAsyncThunk(
   "buttons/fetchButtonInfo",
   async (id: number) => {
-    const response = await axios.get<ButtonInfo>(
-      "https://nse-work.ru/test/ssb/api/actions.php",
-      { params: { id } },
-    );
+    const response = await apiClient.get<ButtonInfo>("/actions.php", {
+      params: { id },
+    });
     return response.data;
   },
 );
@@ -65,10 +62,7 @@ export const fetchButtonInfo = createAsyncThunk(
 export const addButton = createAsyncThunk(
   "buttons/addButton",
   async (name: string) => {
-    const response = await axios.post(
-      "https://nse-work.ru/test/ssb/api/button.php",
-      { name },
-    );
+    const response = await apiClient.post("/button.php", { name });
     return response.data;
   },
 );
@@ -77,8 +71,8 @@ export const reorderButtons = createAsyncThunk(
   "buttons/reorderButtons",
   async (newOrder: number[], { rejectWithValue }) => {
     try {
-      const response = await axios.patch(
-        "https://nse-work.ru/test/ssb/api/button.php",
+      const response = await apiClient.patch(
+        "/button.php",
         {
           order: newOrder,
         },
@@ -98,10 +92,7 @@ export const reorderButtons = createAsyncThunk(
 export const deleteButton = createAsyncThunk(
   "buttons/deleteButton",
   async (id: number) => {
-    const response = await axios.delete(
-      "https://nse-work.ru/test/ssb/api/button.php",
-      { data: { id } },
-    );
+    const response = await apiClient.delete("/button.php", { data: { id } });
     return response.data;
   },
 );
@@ -109,15 +100,11 @@ export const deleteButton = createAsyncThunk(
 export const editButton = createAsyncThunk(
   "buttons/editButton",
   async (formData: FormData) => {
-    const response = await axios.post(
-      `https://nse-work.ru/test/ssb/api/actions.php`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+    const response = await apiClient.post(`/actions.php`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
       },
-    );
+    });
     return response.data;
   },
 );

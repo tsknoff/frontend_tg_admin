@@ -1,14 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import { apiClient } from "../apiClient.ts";
 
 export const fetchAgreement = createAsyncThunk(
   "agreement/fetchAgreement",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        "https://nse-work.ru/test/ssb/api/startMessages.php",
-        { params: { type: "legal" } },
-      );
+      const response = await apiClient.get("/startMessages.php", {
+        params: { type: "legal" },
+      });
 
       console.log(response.data.data.text);
       return response.data.data.text;
@@ -22,13 +21,10 @@ export const updateAgreement = createAsyncThunk(
   "agreement/updateAgreement",
   async (message: string, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        "https://nse-work.ru/test/ssb/api/startMessages.php",
-        {
-          type: "legal",
-          text: message,
-        },
-      );
+      const response = await apiClient.post("/startMessages.php", {
+        type: "legal",
+        text: message,
+      });
       if (response.data.response === "success") {
         return response.data.data.text;
       } else {

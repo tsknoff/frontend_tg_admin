@@ -7,8 +7,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-// import Email from "@mui/icons-material/Email";
+import Email from "@mui/icons-material/Email";
 import Group from "@mui/icons-material/Group";
+import { AdminPanelSettings } from "@mui/icons-material";
 import BarChart from "@mui/icons-material/BarChart";
 import { Link, useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -28,12 +29,12 @@ const categories = [
   {
     id: "2",
     children: [
-      // {
-      //   id: "Рассылки",
-      //   icon: <Email />,
-      //   url: "email",
-      //   active: false,
-      // },
+      {
+        id: "Рассылки",
+        icon: <Email />,
+        url: "email",
+        active: false,
+      },
       {
         id: "Группы",
         icon: <Group />,
@@ -49,6 +50,17 @@ const categories = [
         id: "Статистика",
         icon: <BarChart />,
         url: "statistics",
+        active: false,
+      },
+    ],
+  },
+  {
+    id: "4",
+    children: [
+      {
+        id: "Администраторы",
+        icon: <AdminPanelSettings />,
+        url: "admin",
         active: false,
       },
     ],

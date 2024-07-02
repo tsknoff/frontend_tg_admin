@@ -7,7 +7,7 @@ import { theme } from "../theme.ts";
 import { SideMenu } from "./SideMenu.tsx";
 import { Header } from "./Header.tsx";
 
-const drawerWidth = 200;
+const drawerWidth = 250;
 
 export const Root = () => {
   const [mobileOpen, setMobileOpen] = useState(false);

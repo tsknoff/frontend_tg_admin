@@ -4,6 +4,7 @@ import greetingReducer from "./features/greeting/greetingSlice";
 import agreementReducer from "./features/agreement/agreementSlice";
 import groupsReducer from "./features/groups/groupsSlice";
 import statsReducer from "./features/stats/statSlice";
+import messagesReducer from "./features/messages/messagesSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     agreement: agreementReducer,
     groups: groupsReducer,
     stat: statsReducer,
+    messages: messagesReducer,
   },
 });
 

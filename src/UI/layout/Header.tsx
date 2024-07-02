@@ -9,7 +9,7 @@ import { FC } from "react";
 import Typography from "@mui/material/Typography";
 import { useLocation, useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
-import axios from "axios";
+import { apiClient } from "../../features/apiClient.ts";
 
 interface HeaderProps {
   onDrawerToggle: () => void;
@@ -42,7 +42,7 @@ export const Header: FC<HeaderProps> = ({ onDrawerToggle }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.get("https://nse-work.ru/test/ssb/api/login.php?logout");
+      await apiClient.get("/login.php?logout");
       localStorage.removeItem("username"); // Удаление информации о пользователе из localStorage
       navigate("/login");
     } catch (error) {

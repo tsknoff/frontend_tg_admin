@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { apiClient } from "../apiClient.ts";
 
 export interface StatData {
   labels: string[];
@@ -30,9 +30,7 @@ export const fetchStatData = createAsyncThunk(
   "stat/fetchStatData",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        "https://nse-work.ru/test/ssb/api/stat.php",
-      );
+      const response = await apiClient.get("/stat.php");
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -44,10 +42,9 @@ export const fetchUsersStatData = createAsyncThunk(
   "stat/fetchUsersStatData",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        "https://nse-work.ru/test/ssb/api/stat.php",
-        { params: { type: "users" } },
-      );
+      const response = await apiClient.get("/stat.php", {
+        params: { type: "users" },
+      });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

@@ -8,9 +8,11 @@ import { iconSxProps, rootSxProps, useDashboardStyles } from "./styles.ts";
 import { ButtonsWidget } from "./ButtonsWidget";
 import { GreetingWidget } from "./GreetingWidget";
 import { AgreementWidget } from "./AgreementWidget";
+import { useNavigate } from "react-router-dom";
 
 export const DashboardPage = () => {
   const { classes } = useDashboardStyles();
+  const navigate = useNavigate();
 
   return (
     <Box component="main" sx={rootSxProps}>
@@ -35,7 +37,7 @@ export const DashboardPage = () => {
         <Box className={classes.actionButtons}>
           <Button
             variant="outlined"
-            href="/groups"
+            onClick={() => navigate("/groups")}
             startIcon={<GroupIcon sx={iconSxProps} />}
             className={classes.button}
           >
@@ -43,7 +45,7 @@ export const DashboardPage = () => {
           </Button>
           <Button
             variant="outlined"
-            href="/email"
+            onClick={() => navigate("/email")}
             startIcon={<EmailIcon sx={iconSxProps} />}
             className={classes.button}
           >
@@ -52,7 +54,7 @@ export const DashboardPage = () => {
           <Button
             variant="outlined"
             color="primary"
-            href="/statistics"
+            onClick={() => navigate("/statistics")}
             startIcon={<BarChartIcon sx={iconSxProps} />}
             className={classes.button}
           >

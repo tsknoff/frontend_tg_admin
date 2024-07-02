@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import { apiClient } from "../apiClient.ts";
 
 export interface Group {
   id: string;
@@ -30,19 +30,14 @@ const initialState: GroupState = {
 };
 
 export const fetchGroups = createAsyncThunk("groups/fetchGroups", async () => {
-  const response = await axios.get(
-    "https://nse-work.ru/test/ssb/api/groups.php",
-  );
+  const response = await apiClient.get("/groups.php");
   return response.data.data;
 });
 
 export const addGroup = createAsyncThunk(
   "groups/addGroup",
   async (group: Partial<Group>) => {
-    const response = await axios.post(
-      "https://nse-work.ru/test/ssb/api/groups.php",
-      group,
-    );
+    const response = await apiClient.post("/groups.php", group);
     return response.data.data;
   },
 );
@@ -50,10 +45,7 @@ export const addGroup = createAsyncThunk(
 export const updateGroup = createAsyncThunk(
   "groups/updateGroup",
   async (group: Partial<Group>) => {
-    const response = await axios.patch(
-      "https://nse-work.ru/test/ssb/api/groups.php",
-      group,
-    );
+    const response = await apiClient.patch("/groups.php", group);
     return response.data.data;
   },
 );
@@ -61,10 +53,7 @@ export const updateGroup = createAsyncThunk(
 export const deleteGroup = createAsyncThunk(
   "groups/deleteGroup",
   async (id: string) => {
-    const response = await axios.delete(
-      "https://nse-work.ru/test/ssb/api/groups.php",
-      { data: { id } },
-    );
+    const response = await apiClient.delete("/groups.php", { data: { id } });
     return response.data.data;
   },
 );
@@ -72,9 +61,7 @@ export const deleteGroup = createAsyncThunk(
 export const fetchGroupUsers = createAsyncThunk(
   "groups/fetchGroupUsers",
   async (groupId: string) => {
-    const response = await axios.get(
-      `https://nse-work.ru/test/ssb/api/userGroups.php?id=${groupId}`,
-    );
+    const response = await apiClient.get(`/userGroups.php?id=${groupId}`);
     return response.data.data;
   },
 );
@@ -82,13 +69,10 @@ export const fetchGroupUsers = createAsyncThunk(
 export const updateGroupUsers = createAsyncThunk(
   "groups/updateGroupUsers",
   async (data: { group_id: string; users: User[] }) => {
-    const response = await axios.post(
-      "https://nse-work.ru/test/ssb/api/userGroups.php",
-      {
-        group_id: data.group_id,
-        users: data.users.map((user) => user.id),
-      },
-    );
+    const response = await apiClient.post("/userGroups.php", {
+      group_id: data.group_id,
+      users: data.users.map((user) => user.id),
+    });
     return response.data.data;
   },
 );

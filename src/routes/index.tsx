@@ -1,11 +1,12 @@
 import { Root } from "../UI/layout";
 import { DashboardPage } from "../UI/pages/DashboardPage";
 import { ErrorPage } from "./ErrorPage.tsx";
-import { MailsPage } from "../UI/pages/MailsPage";
+import { MessagesPage } from "../UI/pages/MessagesPage";
 import { StatChartPage } from "../UI/pages/StatChartPage";
 import { GroupsPage } from "../UI/pages/GroupsPage/GroupsPage.tsx";
 import { LoginPage } from "../UI/pages/LoginPage";
 import ProtectedRoute from "../UI/pages/ProtectedRoute.tsx";
+import { CreateAdminPage } from "../UI/pages/CreateAdminPage";
 
 export const routes = [
   {
@@ -28,7 +29,7 @@ export const routes = [
           },
           {
             path: "/email",
-            element: <MailsPage />,
+            element: <MessagesPage />,
           },
           {
             path: "/groups",
@@ -37,6 +38,10 @@ export const routes = [
           {
             path: "/statistics",
             element: <StatChartPage />,
+          },
+          {
+            path: "/admin",
+            element: <CreateAdminPage />,
           },
         ],
       },

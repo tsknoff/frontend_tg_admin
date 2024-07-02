@@ -1,15 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { apiClient } from "../apiClient.ts";
 
 export const fetchGreeting = createAsyncThunk(
   "greeting/fetchGreeting",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        "https://nse-work.ru/test/ssb/api/startMessages.php",
-        { params: { type: "start" } },
-      );
+      const response = await apiClient.get("/startMessages.php", {
+        params: { type: "start" },
+      });
 
       return response.data.data.text;
     } catch (error: any) {
@@ -22,10 +21,10 @@ export const updateGreeting = createAsyncThunk(
   "greeting/updateGreeting",
   async (message: string, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        "https://nse-work.ru/test/ssb/api/startMessages.php",
-        { type: "start", text: message },
-      );
+      const response = await apiClient.post("/startMessages.php", {
+        type: "start",
+        text: message,
+      });
       if (response.data.response === "success") {
         await dispatch(fetchGreeting());
 

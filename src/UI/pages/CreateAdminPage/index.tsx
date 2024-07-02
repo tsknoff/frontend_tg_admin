@@ -1,4 +1,3 @@
-// src/UI/pages/LoginPage.tsx
 import React, { useState } from "react";
 import {
   Box,
@@ -8,39 +7,47 @@ import {
   Typography,
   CircularProgress,
   Alert,
+  Snackbar,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { apiClient } from "../../../features/apiClient.ts";
 
-export const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export const CreateAdminPage: React.FC = () => {
+  const [id, setId] = useState("");
+  const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleCreateAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setSuccessMessage("");
 
     try {
-      const response = await apiClient.post("/login.php", {
-        username,
-        password,
+      const response = await apiClient.post("/createAdmin.php", {
+        id,
+        pass,
       });
 
       if (response.data.status === "success") {
-        localStorage.setItem("username", response.data.data.name);
-        navigate("/");
+        setSuccessMessage(response.data.message);
+        setSnackbarOpen(true);
       } else {
-        setError("Неверное имя пользователя или пароль");
+        setError("Ошибка при создании администратора");
+        setSnackbarOpen(true);
       }
     } catch (error) {
       setError("Произошла ошибка. Пожалуйста, попробуйте еще раз.");
+      setSnackbarOpen(true);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -69,31 +76,31 @@ export const LoginPage: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h5">Войдите в систему</Typography>
-          <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
+          <Typography variant="h5">Создать администратора</Typography>
+          <Box component="form" onSubmit={handleCreateAdmin} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="username"
-              label="Имя пользователя"
-              name="username"
-              autoComplete="username"
+              id="id"
+              label="ID администратора"
+              name="id"
+              autoComplete="id"
               autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={id}
+              onChange={(e) => setId(e.target.value)}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
+              name="pass"
               label="Пароль"
               type="password"
-              id="password"
+              id="pass"
               autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
             />
             {error && <Alert severity="error">{error}</Alert>}
             <Button
@@ -104,10 +111,23 @@ export const LoginPage: React.FC = () => {
               sx={{ mt: 3, mb: 2 }}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} /> : "Войти"}
+              {loading ? <CircularProgress size={24} /> : "Создать"}
             </Button>
           </Box>
         </Box>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        >
+          <Alert
+            onClose={handleSnackbarClose}
+            severity={successMessage ? "success" : "error"}
+          >
+            {successMessage || error}
+          </Alert>
+        </Snackbar>
       </Container>
     </Box>
   );
