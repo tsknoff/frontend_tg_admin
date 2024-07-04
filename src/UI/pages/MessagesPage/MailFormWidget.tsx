@@ -145,7 +145,7 @@ export const MailFormWidget: FC = () => {
             name="group"
             control={control}
             defaultValue=""
-            rules={{ required: "Выбор группы обязателен для заполнения" }}
+            // rules={{ required: "Выбор группы обязателен для заполнения" }}
             render={({ field }) => (
               <TextField
                 {...field}

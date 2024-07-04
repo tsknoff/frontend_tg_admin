@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import { FC, useEffect, useState } from "react";
 import TextEditor from "../../../components/TextEditor";
-import { CircularProgress, TextField } from "@mui/material";
+import { CircularProgress, TextField, IconButton } from "@mui/material";
 import { ImageAttach } from "../../../components/ImageAttach.tsx";
 import { useForm, Controller } from "react-hook-form";
 import { modalStyle } from "./styles.ts";
@@ -14,9 +14,11 @@ import {
   fetchButtonInfo,
 } from "../../../../features/buttons/buttonSlice.ts";
 import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface IEditButtonModal {
   buttonId: number;
+  onClose: () => void;
 }
 
 interface FormData {
@@ -32,7 +34,10 @@ export const ErrorMessage = ({ message }: { message: string | undefined }) => (
   </Typography>
 );
 
-export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
+export const EditButtonModal: FC<IEditButtonModal> = ({
+  buttonId,
+  onClose,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const {
     control,
@@ -100,7 +105,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
 
     dispatch(editButton(formData)).then((result) => {
       if (editButton.fulfilled.match(result)) {
-        console.log("Button updated successfully");
+        onClose(); // закрытие модального окна при успешном сохранении
       } else {
         console.log("Failed to update button");
       }
@@ -132,7 +137,18 @@ export const EditButtonModal: FC<IEditButtonModal> = ({ buttonId }) => {
         </Box>
       ) : (
         <>
-          <Typography variant="h6">Редактирование кнопки</Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h6">Редактирование кнопки</Typography>
+            <IconButton onClick={onClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
           <Box
             style={{
               height: "200px",

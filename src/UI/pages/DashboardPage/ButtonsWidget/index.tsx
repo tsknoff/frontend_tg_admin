@@ -47,7 +47,7 @@ export const ButtonsWidget = () => {
         aria-labelledby="child-modal-title"
         aria-describedby="child-modal-description"
       >
-        <EditButtonModal buttonId={editButtonId!} />
+        <EditButtonModal buttonId={editButtonId!} onClose={handleClose} />
       </Modal>
       <HeaderComponent />
       <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -118,7 +118,7 @@ export const ButtonsWidget = () => {
               </Tooltip>
 
               <Button
-                variant="outlined"
+                variant={"contained"}
                 sx={{ mr: 2 }}
                 onClick={handleAddButton}
               >

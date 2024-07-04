@@ -9,7 +9,6 @@ export const fetchAgreement = createAsyncThunk(
         params: { type: "legal" },
       });
 
-      console.log(response.data.data.text);
       return response.data.data.text;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

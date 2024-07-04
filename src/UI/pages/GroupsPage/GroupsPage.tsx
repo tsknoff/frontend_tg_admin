@@ -59,7 +59,16 @@ const TransferList = ({
   handleCheckedRight,
   handleCheckedLeft,
 }) => {
-  const customList = (title, items) => (
+  const numberOfChecked = (items) => intersection(checked, items).length;
+  const handleToggleAllLeft = () => handleToggleAll(left);
+  const handleToggleAllRight = () => handleToggleAll(right);
+  const leftCheckedCount = numberOfChecked(left);
+  const rightCheckedCount = numberOfChecked(right);
+  const leftAllSelected = leftCheckedCount === left.length && left.length > 0;
+  const rightAllSelected =
+    rightCheckedCount === right.length && right.length > 0;
+
+  const customList = (title, items, allSelected, handleToggleAllItems) => (
     <Paper
       sx={{
         width: "100%",
@@ -70,6 +79,18 @@ const TransferList = ({
       }}
     >
       <List dense component="div" role="list">
+        <ListItem>
+          <ListItemIcon>
+            <Checkbox
+              onClick={handleToggleAllItems}
+              checked={allSelected}
+              indeterminate={numberOfChecked(items) > 0 && !allSelected}
+              disabled={items.length === 0}
+              inputProps={{ "aria-label": "select all items" }}
+            />
+          </ListItemIcon>
+          <ListItemText primary={`Выбрать все (${items.length})`} />
+        </ListItem>
         {items.map((value) => {
           const labelId = `transfer-list-item-${value.id}-label`;
 
@@ -102,7 +123,7 @@ const TransferList = ({
         <Typography variant="h6">
           {left.length > 0 ? "В группе" : "Нет пользователей"}
         </Typography>
-        {customList("Choices", left)}
+        {customList("Choices", left, leftAllSelected, handleToggleAllLeft)}
       </Grid>
       <Grid item>
         <Grid container direction="column" alignItems="center">
@@ -132,7 +153,7 @@ const TransferList = ({
         <Typography variant="h6">
           {right.length > 0 ? "Доступные пользователи" : "Нет пользователей"}
         </Typography>
-        {customList("Chosen", right)}
+        {customList("Chosen", right, rightAllSelected, handleToggleAllRight)}
       </Grid>
     </Grid>
   );
@@ -209,8 +230,6 @@ export const GroupsPage = () => {
 
   const handleOpenUsersDialog = (group) => {
     setSelectedGroup(group);
-    console.log("author", group.author);
-    console.log("disableSave", Number(group.author) === 0);
     setDisableSave(Number(group.author) === 0);
     setOpenUsersDialog(true);
   };
@@ -232,7 +251,7 @@ export const GroupsPage = () => {
     setChecked(newChecked);
   };
 
-  const handleToggleAll = (items) => () => {
+  const handleToggleAll = (items) => {
     if (numberOfChecked(items) === items.length) {
       setChecked(not(checked, items));
     } else {
@@ -272,8 +291,6 @@ export const GroupsPage = () => {
         .flat()
         .filter((id) => Number.isInteger(id))
         .map((id) => ({ id }));
-
-      console.log(excelUsers);
 
       if (excelUsers.length > 0) {
         dispatch(
