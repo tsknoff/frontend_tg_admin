@@ -37,6 +37,7 @@ import {
 } from "../../../../features/messages/messagesSlice.ts";
 import { useMessageHistoryWidgetStyles } from "./styles.ts";
 import ListItemButton from "@mui/material/ListItemButton";
+import TextEditor from "../../../components/TextEditor";
 
 export const MessageHistoryWidget = () => {
   const { classes } = useMessageHistoryWidgetStyles();
@@ -82,10 +83,11 @@ export const MessageHistoryWidget = () => {
   };
 
   const handleDelete = (messageId: number) => {
-    dispatch(deleteMessage(messageId)).then(() => {
+    dispatch(deleteMessage(messageId)).then(async () => {
       setSelectedMessage(null);
       setSnackbarMessage("Сообщение успешно удалено");
       setSnackbarOpen(true);
+      await dispatch(fetchMessages());
     });
   };
 
@@ -101,9 +103,9 @@ export const MessageHistoryWidget = () => {
     setSnackbarOpen(false);
   };
 
-  const uniqueGroups = Array.from(
-    new Set(messages.map((message) => message.group_name)),
-  );
+  const uniqueGroups = () => {
+    return Array.from(new Set(messages.map((message) => message.group_name)));
+  };
 
   return (
     <Paper
@@ -145,7 +147,7 @@ export const MessageHistoryWidget = () => {
             <MenuItem value="">
               <em>Все группы</em>
             </MenuItem>
-            {uniqueGroups.map((group, index) => (
+            {uniqueGroups().map((group, index) => (
               <MenuItem key={group + index} value={group}>
                 {group}
               </MenuItem>
@@ -208,9 +210,14 @@ export const MessageHistoryWidget = () => {
                   Группа: {selectedMessage.group_name}
                 </Typography>
                 <br />
-                <Typography variant="body1">
-                  Текст: {selectedMessage.text}
-                </Typography>
+                <Typography variant="body1">Текст:</Typography>
+                <TextEditor
+                  loading={false}
+                  currentValue={selectedMessage.text}
+                  onChange={() => {}}
+                  textOnly={true}
+                  readonly={true}
+                />
                 <br />
                 {selectedMessage.button_url && (
                   <Typography variant="body1">
@@ -247,7 +254,15 @@ export const MessageHistoryWidget = () => {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleCloseDialog} color="primary">
+              <Button
+                onClick={handleCloseDialog}
+                color="primary"
+                variant={"contained"}
+                style={{
+                  backgroundColor: "#dadada",
+                  color: "#000",
+                }}
+              >
                 Закрыть
               </Button>
               <Button

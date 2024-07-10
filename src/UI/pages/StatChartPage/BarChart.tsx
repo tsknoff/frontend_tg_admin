@@ -39,10 +39,10 @@ const options = {
     legend: {
       position: "top" as const,
     },
-    title: {
-      display: true,
-      text: "Sample Bar Chart",
-    },
+    // title: {
+    //   display: true,
+    //   text: "Sample Bar Chart",
+    // },
   },
 };
 

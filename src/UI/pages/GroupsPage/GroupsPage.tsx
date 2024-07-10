@@ -403,11 +403,21 @@ export const GroupsPage = () => {
                       </Button>
                       <Button
                         endIcon={<EditIcon />}
+                        variant={"contained"}
+                        style={{
+                          backgroundColor: "#dadada",
+                          color: "#000",
+                        }}
                         onClick={() => handleOpen(group)}
                       >
                         Название
                       </Button>
                       <Button
+                        variant={"contained"}
+                        style={{
+                          backgroundColor: "#dadada",
+                          color: "#000",
+                        }}
                         endIcon={<DeleteIcon />}
                         onClick={() => handleDelete(group.id)}
                       >

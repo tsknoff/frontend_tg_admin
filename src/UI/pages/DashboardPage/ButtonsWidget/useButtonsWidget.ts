@@ -54,10 +54,10 @@ export const useButtonsWidget = () => {
   }, [buttons]);
 
   useEffect(() => {
-    if (!items.length) return;
+    if (!items.length || !buttons.length) return;
 
     const isOrderChanged = items.every(
-      (item, index) => item.id === buttons[index].id,
+      (item, index) => item.id === buttons[index]?.id,
     );
     setOrderChanged(!isOrderChanged);
   }, [buttons, items]);
@@ -82,8 +82,8 @@ export const useButtonsWidget = () => {
     }
   };
 
-  const handleDeleteButton = (id: number) => {
-    dispatch(deleteButton(id));
+  const handleDeleteButton = async (id: number) => {
+    await dispatch(deleteButton(id));
     dispatch(fetchButtons());
   };
 

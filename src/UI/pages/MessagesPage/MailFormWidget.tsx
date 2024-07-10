@@ -17,7 +17,10 @@ import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { fetchGroups } from "../../../features/groups/groupsSlice.ts";
-import { sendMessage } from "../../../features/messages/messagesSlice.ts";
+import {
+  fetchMessages,
+  sendMessage,
+} from "../../../features/messages/messagesSlice.ts";
 
 interface FormData {
   group: string;
@@ -52,12 +55,17 @@ export const MailFormWidget: FC = () => {
     setValue("image", file);
   };
 
-  const validateButtonFields = (value: string, allValues: FormData) => {
-    const { buttonText, buttonUrl } = allValues;
+  const validateButtonText = (value: string) => {
+    const { buttonUrl } = getValues();
     if (value && !buttonUrl) {
       return "URL кнопки обязателен для заполнения, если указано название кнопки";
     }
-    if (buttonUrl && !buttonText) {
+    return true;
+  };
+
+  const validateButtonUrl = (value: string) => {
+    const { buttonText } = getValues();
+    if (value && !buttonText) {
       return "Название кнопки обязательно для заполнения, если указан URL кнопки";
     }
     return true;
@@ -73,8 +81,10 @@ export const MailFormWidget: FC = () => {
       formData.append("image", data.image);
     }
 
-    dispatch(sendMessage(formData)).then((result) => {
+    dispatch(sendMessage(formData)).then(async (result) => {
       if (sendMessage.fulfilled.match(result)) {
+        // Обновление списка сообщений
+        await dispatch(fetchMessages());
         setSnackbarMessage("Сообщение успешно отправлено");
         setSnackbarOpen(true);
         reset();
@@ -145,7 +155,7 @@ export const MailFormWidget: FC = () => {
             name="group"
             control={control}
             defaultValue=""
-            // rules={{ required: "Выбор группы обязателен для заполнения" }}
+            rules={{ required: "Выбор группы обязателен для заполнения" }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -171,9 +181,7 @@ export const MailFormWidget: FC = () => {
             name="buttonText"
             control={control}
             defaultValue=""
-            rules={{
-              validate: (value) => validateButtonFields(value, getValues()),
-            }}
+            rules={{ validate: validateButtonText }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -189,9 +197,7 @@ export const MailFormWidget: FC = () => {
             name="buttonUrl"
             control={control}
             defaultValue=""
-            rules={{
-              validate: (value) => validateButtonFields(value, getValues()),
-            }}
+            rules={{ validate: validateButtonUrl }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -218,8 +224,13 @@ export const MailFormWidget: FC = () => {
                   "Размер файла не должен превышать 5MB",
               },
             }}
-            render={() => (
-              <ImageAttach imageSrc="" onFileChange={handleFileChange} />
+            render={({ field: { value } }) => (
+              <ImageAttach
+                onFileChange={handleFileChange}
+                file={{
+                  value: value,
+                }}
+              />
             )}
           />
           {errors.image && <ErrorMessage message={errors.image.message} />}

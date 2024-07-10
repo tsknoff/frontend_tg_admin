@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState, FC, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -8,11 +8,15 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 interface IImageAttachProps {
   imageSrc?: string | null;
+  file?: {
+    value: File | null;
+  };
   onFileChange: (file: File | null) => void;
 }
 
 export const ImageAttach: FC<IImageAttachProps> = ({
   imageSrc,
+  file,
   onFileChange,
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -49,6 +53,20 @@ export const ImageAttach: FC<IImageAttachProps> = ({
       fileInput.value = "";
     }
   };
+
+  useEffect(() => {
+    if (file && !file.value) {
+      setSelectedFile(null);
+      setImagePreview("");
+
+      const fileInput = document.getElementById(
+        "raised-button-file",
+      ) as HTMLInputElement;
+      if (fileInput) {
+        fileInput.value = "";
+      }
+    }
+  }, [file]);
 
   return (
     <Box

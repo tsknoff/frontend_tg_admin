@@ -20,5 +20,6 @@ export const useMessageHistoryWidgetStyles = tss.create({
     height: "calc(100vh - 120px)",
     overflowY: "scroll",
     bgcolor: "background.paper",
+    paddingBottom: "50px",
   },
 });

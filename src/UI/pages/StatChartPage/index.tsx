@@ -38,11 +38,24 @@ export const StatChartPage = () => {
   return (
     <Box
       style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        width: "70vw",
+        gap: "2vw",
         padding: "20px",
       }}
     >
       {data && <BarChart data={data} />}
-      {usersData && <BarChart data={usersData} />}
+      {usersData && (
+        <Box
+          style={{
+            height: "20vh",
+          }}
+        >
+          <BarChart data={usersData} />
+        </Box>
+      )}
     </Box>
   );
 };

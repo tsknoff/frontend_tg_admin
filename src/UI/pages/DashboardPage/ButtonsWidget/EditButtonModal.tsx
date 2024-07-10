@@ -47,7 +47,7 @@ export const EditButtonModal: FC<IEditButtonModal> = ({
     getValues,
     formState: { errors, isValid },
   } = useForm<FormData>({ mode: "onChange" });
-  const { clearFromPTags } = useTextEditor("");
+  const { clearFromPTags, revertToPTags } = useTextEditor("");
   const { buttonInfo, saveStatus } = useSelector(
     (state: RootState) => state.buttons,
   );
@@ -69,10 +69,9 @@ export const EditButtonModal: FC<IEditButtonModal> = ({
       reset({
         buttonText: buttonInfo.buttonName || "",
         buttonUrl: buttonInfo.buttonUrl || "",
-        message: buttonInfo.text || "",
+        message: revertToPTags(buttonInfo.text) || "",
         image: buttonInfo.fileUrl ? new File([], buttonInfo.fileUrl) : null,
       });
-      // console.log("Button info fetched", buttonInfo);
     }
   }, [buttonInfo, reset]);
 
@@ -93,21 +92,24 @@ export const EditButtonModal: FC<IEditButtonModal> = ({
 
   const onSubmit = (data: FormData) => {
     const formData = new FormData();
+
     formData.append("id", String(buttonId));
     formData.append("button_name", data.buttonText);
     formData.append("text", clearFromPTags(data.message));
     formData.append("button_url", data.buttonUrl);
-    if (buttonInfo?.fileUrl) {
+    if (buttonInfo?.fileUrl && !data.image) {
       formData.append("file_url", buttonInfo.fileUrl);
-    } else if (data.image) {
+    } else if (data.image && data.image instanceof File) {
       formData.append("image", data.image);
+      formData.delete("file_url");
     }
 
     dispatch(editButton(formData)).then((result) => {
       if (editButton.fulfilled.match(result)) {
+        reset();
         onClose(); // закрытие модального окна при успешном сохранении
       } else {
-        console.log("Failed to update button");
+        // console.log("Failed to update button");
       }
     });
   };

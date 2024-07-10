@@ -37,6 +37,7 @@ interface ITextEditorProps {
   onChange: (value: string) => void;
   style?: CSSProperties;
   textOnly?: boolean;
+  readonly?: boolean;
 }
 
 const TextEditor: FC<ITextEditorProps> = ({
@@ -46,6 +47,7 @@ const TextEditor: FC<ITextEditorProps> = ({
   style,
   onChange,
   textOnly = false,
+  readonly = false,
 }) => {
   if (loading) {
     return (
@@ -63,6 +65,7 @@ const TextEditor: FC<ITextEditorProps> = ({
 
   return (
     <ReactQuill
+      readOnly={readonly}
       placeholder={placeholder}
       value={currentValue}
       onChange={onChange}

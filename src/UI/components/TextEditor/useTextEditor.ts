@@ -13,8 +13,30 @@ export const useTextEditor = (initialMessage: string) => {
 
   const clearFromPTags = (text: string) => {
     if (!text) return text;
-    return text.replace(/<p>/g, "").replace(/<\/p>/g, "");
+
+    // Удаление тегов <p> и замена их на перенос строки
+    return text
+      .replace(/<p>/g, "")
+      .replace(/<\/p>/g, "\n")
+      .replace(/<br>/g, "\n");
+    // .replace(/<[^>]+>/g, ""); // Удаление остальных HTML-тегов
   };
 
-  return { draftMessage, setDraftMessage, handleChange, clearFromPTags };
+  const revertToPTags = (text: string) => {
+    if (!text) return text;
+
+    // Разбиваем текст по переносам строк и оборачиваем в <p>
+    return text
+      .split("\n")
+      .map((line) => `<p>${line}</p>`)
+      .join("");
+  };
+
+  return {
+    draftMessage,
+    setDraftMessage,
+    handleChange,
+    clearFromPTags,
+    revertToPTags,
+  };
 };
