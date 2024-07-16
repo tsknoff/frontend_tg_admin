@@ -71,6 +71,9 @@ export const ButtonsWidget = () => {
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}
               >
+                {items.length === 0 && (
+                  <div style={{ padding: "10px" }}>Список пуст</div>
+                )}
                 {items.map((item, index) => (
                   <div key={item.id}>
                     <DraggableItemComponent
