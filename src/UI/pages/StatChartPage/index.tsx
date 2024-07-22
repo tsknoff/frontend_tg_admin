@@ -20,6 +20,10 @@ export const StatChartPage = () => {
     dispatch(fetchUsersStatData());
   }, [dispatch]);
 
+  if (!data || !usersData) {
+    return null;
+  }
+
   if (status === "loading") {
     return (
       <Box
@@ -41,18 +45,14 @@ export const StatChartPage = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
-        width: "70vw",
+        width: "60vw",
         gap: "2vw",
         padding: "20px",
       }}
     >
       {data && <BarChart data={data} />}
       {usersData && (
-        <Box
-          style={{
-            height: "20vh",
-          }}
-        >
+        <Box>
           <BarChart data={usersData} />
         </Box>
       )}
