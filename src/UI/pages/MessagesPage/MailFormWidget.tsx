@@ -168,11 +168,12 @@ export const MailFormWidget: FC = () => {
                 <option value="" disabled>
                   Выберите группу
                 </option>
-                {groups.map((group) => (
-                  <option key={group.id} value={group.id}>
-                    {group.name}
-                  </option>
-                ))}
+                {groups &&
+                  groups.map((group) => (
+                    <option key={group.id} value={group.id}>
+                      {group.name}
+                    </option>
+                  ))}
               </TextField>
             )}
           />

@@ -91,27 +91,28 @@ const TransferList = ({
           </ListItemIcon>
           <ListItemText primary={`Выбрать все (${items.length})`} />
         </ListItem>
-        {items.map((value) => {
-          const labelId = `transfer-list-item-${value.id}-label`;
+        {items.length > 0 &&
+          items.map((value) => {
+            const labelId = `transfer-list-item-${value.id}-label`;
 
-          return (
-            <ListItem
-              key={value.id}
-              role="listitem"
-              onClick={handleToggle(value)}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={value.name} />
-            </ListItem>
-          );
-        })}
+            return (
+              <ListItem
+                key={value.id}
+                role="listitem"
+                onClick={handleToggle(value)}
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    checked={checked.indexOf(value) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ "aria-labelledby": labelId }}
+                  />
+                </ListItemIcon>
+                <ListItemText id={labelId} primary={value.name} />
+              </ListItem>
+            );
+          })}
         <ListItem />
       </List>
     </Paper>
@@ -350,85 +351,86 @@ export const GroupsPage = () => {
             width: "100%",
           }}
         >
-          {groups.map((group) => (
-            <Paper
-              key={group.id}
-              style={{
-                borderRadius: "5px",
-                backgroundColor: "#fff",
-                width: "fit-content",
-              }}
-            >
-              <h3
+          {!!groups &&
+            groups.map((group) => (
+              <Paper
+                key={group.id}
                 style={{
-                  paddingLeft: "10px",
+                  borderRadius: "5px",
+                  backgroundColor: "#fff",
+                  width: "fit-content",
                 }}
               >
-                {group.name}
-              </h3>
+                <h3
+                  style={{
+                    paddingLeft: "10px",
+                  }}
+                >
+                  {group.name}
+                </h3>
 
-              <AppBar
-                position="static"
-                color="default"
-                elevation={0}
-                sx={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
-              >
-                <Toolbar>
-                  <Grid
-                    container
-                    spacing={2}
-                    alignItems="center"
-                    style={{
-                      paddingTop: "10px",
-                      paddingBottom: "10px",
-                    }}
-                  >
+                <AppBar
+                  position="static"
+                  color="default"
+                  elevation={0}
+                  sx={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
+                >
+                  <Toolbar>
                     <Grid
-                      item
+                      container
+                      spacing={2}
+                      alignItems="center"
                       style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "10px",
+                        paddingTop: "10px",
+                        paddingBottom: "10px",
                       }}
                     >
-                      <Button
-                        endIcon={<EditIcon />}
-                        variant={"contained"}
-                        onClick={() => handleOpenUsersDialog(group)}
+                      <Grid
+                        item
                         style={{
-                          textWrap: "nowrap",
+                          display: "flex",
+                          flexDirection: "row",
+                          gap: "10px",
                         }}
                       >
-                        Участники
-                      </Button>
-                      <Button
-                        endIcon={<EditIcon />}
-                        variant={"contained"}
-                        style={{
-                          backgroundColor: "#dadada",
-                          color: "#000",
-                        }}
-                        onClick={() => handleOpen(group)}
-                      >
-                        Название
-                      </Button>
-                      <Button
-                        variant={"contained"}
-                        style={{
-                          backgroundColor: "#dadada",
-                          color: "#000",
-                        }}
-                        endIcon={<DeleteIcon />}
-                        onClick={() => handleDelete(group.id)}
-                      >
-                        Удалить
-                      </Button>
+                        <Button
+                          endIcon={<EditIcon />}
+                          variant={"contained"}
+                          onClick={() => handleOpenUsersDialog(group)}
+                          style={{
+                            textWrap: "nowrap",
+                          }}
+                        >
+                          Участники
+                        </Button>
+                        <Button
+                          endIcon={<EditIcon />}
+                          variant={"contained"}
+                          style={{
+                            backgroundColor: "#dadada",
+                            color: "#000",
+                          }}
+                          onClick={() => handleOpen(group)}
+                        >
+                          Название
+                        </Button>
+                        <Button
+                          variant={"contained"}
+                          style={{
+                            backgroundColor: "#dadada",
+                            color: "#000",
+                          }}
+                          endIcon={<DeleteIcon />}
+                          onClick={() => handleDelete(group.id)}
+                        >
+                          Удалить
+                        </Button>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Toolbar>
-              </AppBar>
-            </Paper>
-          ))}
+                  </Toolbar>
+                </AppBar>
+              </Paper>
+            ))}
         </Box>
       )}
 

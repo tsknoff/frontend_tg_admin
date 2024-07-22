@@ -166,6 +166,8 @@ export const MessageHistoryWidget = () => {
             sx={{ position: "absolute", top: "50%", left: "50%" }}
           />
         ) : (
+          !!filteredMessages &&
+          filteredMessages.length !== 0 &&
           filteredMessages.map((message) => (
             <div key={message.id}>
               <ListItemButton

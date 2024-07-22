@@ -71,19 +71,22 @@ export const ButtonsWidget = () => {
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}
               >
-                {items.length === 0 && (
-                  <div style={{ padding: "10px" }}>Список пуст</div>
-                )}
-                {items.map((item, index) => (
-                  <div key={item.id}>
-                    <DraggableItemComponent
-                      item={item}
-                      index={index}
-                      onEdit={handleEditButton(item.id)}
-                      onDelete={handleDeleteButton}
-                    />
+                {!items.length && (
+                  <div style={{ padding: "8px" }}>
+                    Нет кнопок для отображения.
                   </div>
-                ))}
+                )}
+                {items.length &&
+                  items.map((item, index) => (
+                    <div key={item.id}>
+                      <DraggableItemComponent
+                        item={item}
+                        index={index}
+                        onEdit={handleEditButton(item.id)}
+                        onDelete={handleDeleteButton}
+                      />
+                    </div>
+                  ))}
                 {provided.placeholder}
               </Box>
             )}
