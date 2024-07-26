@@ -35,6 +35,7 @@ import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import AddIcon from "@mui/icons-material/Add";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { apiClient } from "../../../features/apiClient.ts";
 
 const not = (a, b) => {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -515,6 +516,25 @@ export const GroupsPage = () => {
                     hidden
                     onChange={handleFileUpload}
                   />
+                </Button>
+                <Button
+                  endIcon={<FileDownloadIcon />}
+                  variant="contained"
+                  component="label"
+                  style={{
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                  }}
+                  onClick={() => {
+                    const groupID = selectedGroup.id;
+                    window.open(
+                      apiClient.defaults.baseURL +
+                        `/downloadUsers.php?groupID=${groupID}`,
+                      "_blank",
+                    );
+                  }}
+                >
+                  Скачать в xls
                 </Button>
               </Box>
               <TransferList

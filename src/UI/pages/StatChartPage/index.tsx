@@ -51,11 +51,7 @@ export const StatChartPage = () => {
       }}
     >
       {data && <BarChart data={data} />}
-      {usersData && (
-        <Box>
-          <BarChart data={usersData} />
-        </Box>
-      )}
+      {usersData && <BarChart data={usersData} />}
     </Box>
   );
 };
