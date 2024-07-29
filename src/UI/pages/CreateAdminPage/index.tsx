@@ -32,7 +32,7 @@ export const CreateAdminPage: React.FC = () => {
       });
 
       if (response.data.status === "success") {
-        setSuccessMessage(response.data.message);
+        setSuccessMessage("Администратор успешно создан");
         setSnackbarOpen(true);
       } else {
         setError("Ошибка при создании администратора");
