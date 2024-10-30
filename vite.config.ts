@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://nse-work.ru/test/ssb", // Целевой URL для проксирования
+        target: "https://games-bot.spasibosb.ru", // Целевой URL для проксирования
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
